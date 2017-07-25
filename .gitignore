@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Settings file (contains sensitive information
+/mysite/mysite/settings.py
+# I don't know if the key can be obtained from this file but just in case
+/mysite/mysite/settings.pyc
+
 # C extensions
 *.so
 
