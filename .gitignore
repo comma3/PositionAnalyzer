@@ -82,6 +82,9 @@ celerybeat-schedule
 # dotenv
 .env
 
+# vagrant folder
+.vagrant/
+
 # virtualenv
 .venv
 venv/
