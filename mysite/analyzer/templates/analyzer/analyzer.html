@@ -42,11 +42,12 @@ document.onmousemove = function(e){
 
 	{% csrf_token %}
 
-<!-- Nade/bomb info -->
-	<div class="col-md-3">
-		<textarea name="nadesbox" id="nadesbox" cols="49" rows="5" readonly="true" onclick="$('#nadesbox').getSelection()"></textarea>
+<!-- Nade/bomb/player info -->
+	<div class="col-md-4">
+		<b>Nades:</b><br>
+		<textarea name="nadesbox" id="nadesbox" cols="59" rows="5" readonly="true" onclick="$('#nadesbox').getSelection()"></textarea>
 		<div>
-			Nade/Bomb:
+			<b>Nade/Bomb:</b>
 			<select class="form-control input-sm" id="nadetype" name="nadetype" onchange="setActive('nade')">
 				<option value="Smoke">Smoke</option>
 				<option value="Molly">Molly</option>
@@ -59,36 +60,38 @@ document.onmousemove = function(e){
 		</div>
 
 		<div class="btn-group">
-			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Selected</button>
+			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Nade</button>
 			<button type="button" onclick="clearNades()" class="btn btn-danger btn-sm">Remove All</button>
 		</div>
-
-		<textarea name="playerbox" id="playerbox" cols="49" rows="5" readonly="true" onclick="$('#playerbox').getSelection()"></textarea>
+		<br>
+		<br>
+		<b>Players:</b><br>
+		<textarea name="playerbox" id="playerbox" cols="59" rows="5" readonly="true" onclick="$('#playerbox').getSelection()"></textarea>
 		<div>
-			Weapon:
+			<b>Weapon:</b>
 			<select class="form-control input-sm" id="playertype" name="playertype" onchange="setActive('player')">
 				{% include "analyzer/includes/weaponsnippet.html" %}
 			</select>
 		</div>
 
 		<div class="btn-group">
-			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Selected</button>
+			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add T</button>
+			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add CT</button>
+			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Dead T</button>
+			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Dead CT</button>
 			<button type="button" onclick="clearNades()" class="btn btn-danger btn-sm">Remove All</button>
 		</div>
 
-<!-- Run Query -->
 
+<!--End of middle column-->
 	</div>
 
-	<div>
-		<h5>Controls:</h5>
-		<input type="submit" value="Submit" class="btn btn-success btn-lg" onclick="startQuery()">
-		<button type="button" class="btn btn-danger btn-lg" onclick="resetAll()">Reset All</button>
-		<button type="button" class="btn btn-info btn-lg" onclick="resetAllIcons()">Remove Icons</button>
-	</div>
+<!-- Controls/Options/Run Query -->
+	<div class="col-md-4">
 
+	<h4>Options:</h4>
 	<div>
-		Rank:
+		<b>Rank:</b>
 		<select id="rank" class="form-control input-sm">
 			<option value="pro">Pro</option>
 			<option value="all">All</option>
@@ -105,14 +108,28 @@ document.onmousemove = function(e){
 		</select>
 	</div>
 	<div>
-		Map:
+		<b>Map:</b>
 		<select id="map" class="form-control input-sm">
 			<option value="inferno">Inferno</option>
 		</select>
 	</div>
 
+	<h4>Instructions:</h4>
+	<p>Use the selection menus labeled "Nade/Bomb" and "Weapon" to choose the nade or weapon of the relevant player.</p>
+	<p>Click "Add Selected" or "Add T/CT", then click the location of the player or nade on the map.</p>
+	<p>Unspecified players will always default to any status in the search. Nades and bombs will also always be variable in the results.</p>
+
+
+	<div>
+		<input type="submit" value="Submit" class="btn btn-success btn-lg" onclick="startQuery()">
+		<button type="button" class="btn btn-danger btn-lg" onclick="resetAll()">Reset All</button>
+		<button type="button" class="btn btn-info btn-lg" onclick="resetAllIcons()">Remove Icons</button>
+	</div>
 <!-- End of query form -->
 	</form>
+	<!--End of control column-->
+	</div>
+
 
 </div> <!--End of row div-->
 
