@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class PositionanalyzerConfig(AppConfig):
-    name = 'positionanalyzer'
+class AnalyzerConfig(AppConfig):
+    name = 'analyzer'

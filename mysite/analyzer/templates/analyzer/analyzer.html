@@ -1,4 +1,4 @@
-{% extends "CSPABlog/header.html" %}
+{% extends "HeaderFiles/header.html" %}
 
 {% block content %}
 
@@ -24,7 +24,7 @@ document.onmousemove = function(e){
 
 {% load staticfiles %}
 
-{% include "positionanalyzer/includes/objecticons.html" %}
+{% include "analyzer/includes/objecticons.html" %}
 
 <div class="row">
 	<!-- Map Image -->
@@ -118,7 +118,7 @@ document.onmousemove = function(e){
 </div>
 
 <!--Snippet contains the code for actual player info. This document is shorter and find+replace should be safer if this is in a different document.-->
-{% include "positionanalyzer/includes/playersnippet.html" %}
+{% include "analyzer/includes/playersnippet.html" %}
 
 <!-- End of query form -->
  </form>
@@ -127,7 +127,7 @@ document.onmousemove = function(e){
 
 <map name="inferno">
 <!--Really long and will probably be changed frequently. Should make modification of this page for other maps simpler.-->
-	{% include "positionanalyzer/includes/infernomapcoords_test.html" %}
+	{% include "analyzer/includes/infernomapcoords_test.html" %}
 </map>
 
 <body onload="errorTest()">

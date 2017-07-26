@@ -54,7 +54,7 @@ def dbquery(request):
 
  #Javascript does some checks prior to submitting query. Hopefully that will decrease server load. This should still trigger if the JS allows impossible searches through.
     if len(CTPos) == 0 and len(TPos) == 0 and len(NadeList) == 0 or Error == True:
-        return render(request, 'positionanalyzer/analyzer.html', {'Error' : Error, 'BadSearch' : 'true', 'NoGames' : 'false', 'CTKill': 1, 'TKill' : 2, 'Defuse': 1, 'Time' : 1,'TargetBombed': 1})
+        return render(request, 'analyzer/analyzer.html', {'Error' : Error, 'BadSearch' : 'true', 'NoGames' : 'false', 'CTKill': 1, 'TKill' : 2, 'Defuse': 1, 'Time' : 1,'TargetBombed': 1})
 
 
     if len(CTPos) > 0 or len(TPos) > 0 or len(nades) > 0:
@@ -107,7 +107,7 @@ def dbquery(request):
 
 
         if ctsearch.count() == 0 and tsearch.count() == 0 and nadesearch.count() == 0:
-            return render(request, 'positionanalyzer/analyzer.html', {'Error' : Error, 'BadSearch' : 'false', 'NoGames' : 'true', 'CTKill': 0, 'TKill' : 0, 'Defuse': 0, 'Time' : 0,'TargetBombed': 1})
+            return render(request, 'analyzer/analyzer.html', {'Error' : Error, 'BadSearch' : 'false', 'NoGames' : 'true', 'CTKill': 0, 'TKill' : 0, 'Defuse': 0, 'Time' : 0,'TargetBombed': 1})
 
         #need to rewrite queries above. don't know if I can combine the query sets
 
@@ -121,4 +121,4 @@ def dbquery(request):
         BombCount = ctsearch.filter(game_id__win_reason='TargetBombed').count()
 
 
-        return render(request, 'positionanalyzer/analyzer.html', {'Error' : Error,  'CTKill': CTKillCount, 'TKill' : TKillCount, 'Defuse': DefuseCount, 'Time' : TimeCount,'TargetBombed': BombCount})
+        return render(request, 'analyzer/analyzer.html', {'Error' : Error,  'CTKill': CTKillCount, 'TKill' : TKillCount, 'Defuse': DefuseCount, 'Time' : TimeCount,'TargetBombed': BombCount})
