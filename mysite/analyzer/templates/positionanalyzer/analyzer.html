@@ -1,0 +1,135 @@
+{% extends "CSPABlog/header.html" %}
+
+{% block content %}
+
+<script>
+var OBJECT = "null";
+var NADES = [];
+var SMOKECOUNT = 0
+var FLASHCOUNT = 0
+var HECOUNT = 0
+var MOLLYCOUNT = 0
+var DECOYCOUNT = 0
+var BOMBCOUNT = 0
+var cursorX;
+var cursorY;
+
+document.onmousemove = function(e){
+    cursorX = e.pageX - 545;
+    cursorY = e.pageY - 47;
+	}
+	setInterval(checkCursor, 250);
+	
+</script>
+
+{% load staticfiles %}
+
+{% include "positionanalyzer/includes/objecticons.html" %}
+
+<div class="row">
+	<!-- Map Image -->
+	<div class="col-md-4">
+		<img src="{% static 'img/inferno_newcrop.png' %}" width="456" height="451" class="map" id="infernolistener" usemap="#inferno">
+	</div>
+
+<!-- Begining of query form -->
+<form name='CSPAForm' action="" method="post">
+	{% csrf_token %}
+<!-- Nade/bomb info -->
+	<div class="col-md-3">
+		<textarea name="nadesbox" id="nadesbox" cols="49" rows="5" readonly="true" onclick="$('#nadesbox').getSelection()"></textarea>
+		<div>
+			Nade/Bomb:
+			<select class="form-control input-sm" id="nadetype" name="nadetype" onchange="setActive('nade')">
+				<option value="Smoke">Smoke</option>
+				<option value="Molly">Molly</option>
+				<option value="Flash">Flash</option>
+				<option value="HE">HE</option>
+				<option value="Decoy">Decoy</option>
+				<option value="bombdown">Bomb Down</option>
+				<option value="bombplanted">Bomb Planted</option>
+			</select>
+		</div>
+		
+		<div>			
+			Precision:
+			<select id="nadeprecision" class="form-control input-sm">
+				<option value="exact">Exact</option>
+				<option value="tight" selected="selected">Tight</option>
+				<option value="loose">Loose</option>
+			</select>		
+		</div>
+		
+		<div class="btn-group">
+			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Selected</button>
+			<button type="button" onclick="clearNades()" class="btn btn-danger btn-sm">Remove All</button>
+		</div>	
+<!-- Run Query -->
+		<div>
+			<h3>Controls:</h3>
+			<input type="submit" value="Submit" class="btn btn-success btn-lg" onclick="startQuery()">
+			<button type="button" class="btn btn-danger btn-lg" onclick="resetAll()">Reset All</button>	
+			<button type="button" class="btn btn-info btn-lg" onclick="resetAllIcons()">Remove Icons</button>	
+		</div>
+		<div>
+			<h3>Rank:</h3>
+			<select id="rank" class="form-control input-sm">
+				<option value="dmgplus">DMG+</option>
+				<option value="all">All</option>
+				<option value="allmm">All MM</option>
+				<option value="pro">Pro</option>
+				<option value="global">Global</option>
+				<option value="smfc">SMFC</option>
+				<option value="eagle">Eagle</option>
+				<option value="mgedmg">MGE/DMG</option>
+				<option value="mg">MG1/2</option>
+				<option value="gn34">GN3/4</option>
+				<option value="gn12">GN1/2</option>
+				<option value="s45">Silver4/5</option>
+				<option value="s123">ChuBot's Level</option>
+			</select>	
+		</div>
+	</div> 
+	
+<!-- Pie chart results -->
+	<div class="col-md-3">
+		<h3>Results:</h3>
+		<div id="piechart" style="width: 400px; height: 300px;"></div>
+	</div>
+</div>
+
+<!--Titles for player columns-->
+<div class="row">
+	<div class="col-md-1">
+		<h3>Player</h3>
+	</div>
+	<div class="col-md-3">
+		<h3>Position</h3>
+	</div>
+	<div class="col-md-2">
+		<h3>Weapon</h3>
+	</div>
+	<div class="col-md-2">
+		<h3>Set</h3>
+	</div>
+	<div class="col-md-1">
+		<h3>Precision</h3>
+	</div>
+</div>
+
+<!--Snippet contains the code for actual player info. This document is shorter and find+replace should be safer if this is in a different document.-->
+{% include "positionanalyzer/includes/playersnippet.html" %}
+
+<!-- End of query form -->
+ </form>
+
+
+
+<map name="inferno">
+<!--Really long and will probably be changed frequently. Should make modification of this page for other maps simpler.-->
+	{% include "positionanalyzer/includes/infernomapcoords_test.html" %}
+</map>
+
+<body onload="errorTest()">
+
+{% endblock %}	

@@ -1,0 +1,270 @@
+<div class="row">
+	<div class="col-md-1">
+		<p>CT1</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="CT1Status" name="CT1Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="CT1Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('CT1')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('CT1')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('CT1')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="CT1precision" name="CT1precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>CT2</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="CT2Status" name="CT2Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="CT2Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('CT2')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('CT2')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('CT2')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="CT2precision" name="CT2precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>CT3</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="CT3Status" name="CT3Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="CT3Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('CT3')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('CT3')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('CT3')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="CT3precision" name="CT3precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>CT4</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="CT4Status" name="CT4Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="CT4Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('CT4')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('CT4')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('CT4')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="CT4precision" name="CT4precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>CT5</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="CT5Status" name="CT5Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="CT5Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('CT5')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('CT5')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('CT5')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="CT5precision" name="CT5precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>T1</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="T1Status" name="T1Status" readonly="true" value="Any" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="T1Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('T1')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('T1')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('T1')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="T1precision" name="T1precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>T2</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="T2Status" name="T2Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="T2Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('T2')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('T2')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('T2')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="T2precision" name="T2precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>T3</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="T3Status" name="T3Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="T3Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('T3')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('T3')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('T3')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="T3precision" name="T3precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>T4</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="T4Status" name="T4Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="T4Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('T4')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('T4')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('T4')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="T4precision" name="T4precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-1">
+		<p>T5</p>
+	</div>
+	<div class="col-md-3">
+		<input class="form-control input-sm" type="text" id="T5Status" name="T5Status" value="Any" readonly="true" size="25">
+	</div>
+	<div class="col-md-2">
+		<select id="T5Weapon" class="form-control input-sm">
+		{% include "positionanalyzer/includes/weaponsnippet.html" %}
+		</select>
+	</div>
+	<div class="col-md-2">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary btn-sm" onclick="setActive('T5')">Position</button>
+			<button type="button" class="btn btn-danger btn-sm" onclick="setPlayerDead('T5')">Dead</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="resetPlayer('T5')">Any</button>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<select id="T5precision" name="T5precision" class="form-control input-sm">
+			<option value="exact">Exact</option>
+			<option value="tight" selected="selected">Tight</option>
+			<option value="loose">Loose</option>
+		</select>
+	</div>
+</div>

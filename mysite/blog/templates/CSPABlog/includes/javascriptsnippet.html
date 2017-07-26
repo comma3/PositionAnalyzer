@@ -1,0 +1,294 @@
+    {% load staticfiles %}
+	
+	
+	<script type="text/javascript">
+	
+	function errorTest()
+	{
+		if ({{BadSearch}}) {
+			resetAll();
+		} else if ({{Error}}) {
+			alert("Something went wrong!");
+			resetAll();
+		} else if ({{NoGames}}) {
+			alert("No games matched your search. Consider removing some limited factors.");
+			resetAll();			
+		}
+	}
+	
+	<!-- Pie Chart Code -->
+	
+		google.charts.load('current', {'packages':['corechart']});
+		<!-- google.charts.setOnLoadCallback(drawChart); -->
+		
+	function drawChart(data) 
+	{
+		var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+		
+		var options = {
+		  title: 'Round Results',
+		  backgroundColor: '#f6f6f6',
+		  chartArea:{width:'100%',height:'100%'},
+		  colors:['#2554C7','#002295','#00004F','#C79926','#947100']
+		};
+
+		chart.draw(data, options);
+	}
+		
+	
+	function setObjectPosition(positionID, selectedObject)
+	{
+		if (selectedObject == "nade")
+		{
+			nadetype = document.getElementById("nadetype").value
+			switch (nadetype) 
+			{
+			case "bombdown" :
+			case "bombplanted" :
+			<!-- Too many bombs is handled by setActive, so setting a bomb can't be done -->
+				BOMBCOUNT = BOMBCOUNT + 1;
+				moveIcon(nadetype);
+				nadetype = nadetype.replace("bombdown", "Bomb Down").replace("bombplanted", "Bomb Planted")
+				break;
+				
+			case "Smoke" :
+				SMOKECOUNT = SMOKECOUNT + 1;
+				if (SMOKECOUNT > 10){alert("More than 10 Smokes?");}
+				cursorX = cursorX - 7
+				cursorY = cursorY - 7
+				moveIcon(nadetype + SMOKECOUNT);
+				break;
+			
+			case "Flash" : 
+				FLASHCOUNT = FLASHCOUNT + 1;
+				if (FLASHCOUNT > 20){alert("More than 20 Flashes?");}
+				cursorX = cursorX - 7
+				cursorY = cursorY - 7
+				moveIcon(nadetype + FLASHCOUNT);
+				break;
+			
+			case "HE" : 
+				HECOUNT = HECOUNT + 1;
+				if (HECOUNT > 10){alert("More than 10 HEs?");}
+				cursorX = cursorX - 3
+				cursorY = cursorY - 3
+				moveIcon(nadetype + HECOUNT);
+				break;
+			
+			case "Molly" : 
+				MOLLYCOUNT = MOLLYCOUNT + 1;
+				if (MOLLYCOUNT > 10){alert("More than 10 mollies?");}
+				cursorX = cursorX - 5
+				cursorY = cursorY - 10
+				moveIcon(nadetype + MOLLYCOUNT);
+				break;
+			
+			case "Decoy" : 
+				DECOYCOUNT = DECOYCOUNT + 1;
+				if (DECOYCOUNT > 10){alert("More than 10 Decoys? Bold strategy.");}
+				moveIcon(nadetype + DECOYCOUNT);
+				break;
+				
+			default :
+				alert("You snuck a weird nade in!");
+				break;
+			}
+			
+			<!-- Add nade to list -->
+			OBJECT = "null";
+			NADES.push(nadetype + " " + positionID + " - " + document.getElementById("nadeprecision").value);
+			nadesbox.value=NADES.join("\n");
+			
+		} else if (selectedObject != "null") {
+			document.getElementById(selectedObject + "Status").value = positionID;
+			moveIcon(selectedObject)
+			OBJECT = "null";
+		} else {
+			alert("Please select the object first! The number doesn't matter only the team!");
+		}
+	}
+	
+	function moveIcon(selectedIcon)
+	{
+	    var avatar = document.getElementById(selectedIcon);
+		avatar.style.left = cursorX + "px";
+		avatar.style.top = cursorY + "px";	
+	}
+	
+	function setActive(newObject)
+	{
+		if (newObject == 'nade' && BOMBCOUNT == 1 && (document.getElementById("nadetype").value == "bombdown" || document.getElementById("nadetype").value == "bombplanted")) {
+			document.getElementById("nadetype").value = "Smoke"
+			alert("You already have a bomb somewhere!");
+		} else {
+		OBJECT = newObject;
+		}
+	}
+	
+	function resetIcon(selectedIcon)
+	{
+		<!-- Could change to an array lookup  -->
+		iconspacing = 30;	
+		cursorX = 800;
+		cursorY = 522;
+		switch (selectedIcon)
+		{
+		case "T5":
+			cursorY = cursorY + iconspacing;
+		case "T4":
+			cursorY = cursorY + iconspacing;
+		case "T3":
+			cursorY = cursorY + iconspacing;
+		case "T2":
+			cursorY = cursorY + iconspacing;
+		case "T1":
+			cursorY = cursorY + iconspacing;
+		case "CT5":
+			cursorY = cursorY + iconspacing;
+		case "CT4":
+			cursorY = cursorY + iconspacing;
+		case "CT3":
+			cursorY = cursorY + iconspacing;
+		case "CT2":
+			cursorY = cursorY + iconspacing;
+		case "CT1":
+			break;
+		default:
+			cursorX = 100;
+			cursorY = 1;
+			break;
+		}
+		moveIcon(selectedIcon);
+	}
+	
+	function resetPlayer(selectedPlayer)
+	{
+		resetIcon(selectedPlayer)
+		document.getElementById(selectedPlayer + 'Status').value = 'Any';
+		document.getElementById(selectedPlayer + 'Weapon').value = 'any';
+		document.getElementById(selectedPlayer + 'precision').value = 'exact';
+	}
+	
+	function setPlayerDead(selectedPlayer)
+	{
+		moveIcon(selectedPlayer);
+		document.getElementById(selectedPlayer + 'Status').value = 'Dead';
+		document.getElementById(selectedPlayer + 'precision').value = 'exact';	
+	}
+	
+	function clearNades()
+	{
+		NADES.length = 0;
+		<!-- check if this can be just NADES not NADES.join() -->
+		nadesbox.value=NADES.join("\n");
+		SMOKECOUNT = 0;
+		FLASHCOUNT = 0;
+		HECOUNT = 0;
+		MOLLYCOUNT = 0;
+		DECOYCOUNT = 0;
+		BOMBCOUNT = 0;
+		resetNadeIcons();
+	}
+	
+	function resetAllIcons()
+	{
+		for (i = 1; i <=5; i++)
+		{
+		resetIcon("CT"+i);
+		resetIcon("T"+i);
+		}
+		resetNadeIcons();
+	}
+	
+	function resetNadeIcons()
+	{
+		for (i = 1; i <=10; i++)
+		{
+			resetIcon("Smoke" + i);
+			resetIcon("Flash" + i);
+			<!-- Allows for up to 20 flashes -->
+			resetIcon("Flash" + (i + 10)); 
+			resetIcon("HE" + i);
+			resetIcon("Molly" + i);
+			resetIcon("Decoy" + i);
+		}
+		resetIcon("cheekycover");
+		resetIcon("bombdown");
+		resetIcon("bombplanted");
+	}
+	
+	function resetAll()
+	{
+		clearNades();
+		
+		OBJECT = "null";
+		
+		for (i = 1; i <=5; i++)
+		{		
+		resetPlayer("CT"+i);
+		resetPlayer("T"+i);
+		}
+		
+		drawResults();
+	}
+	
+	
+	function drawResults()
+	{
+		var data = google.visualization.arrayToDataTable([
+          ['Winner', 'Percent'],
+          ['CTKills', {{CTKill}}],
+          ['Defuse', {{Defuse}}],
+          ['Time',  {{Time}}],
+          ['TKills', {{TKill}}],
+          ['Target Bombed', {{TargetBombed}}],
+        ]);
+		
+		drawChart(data);
+
+	}
+
+	
+	function startQuery()
+	{
+		$form=$('#CSPAForm');
+		var datastring = $form.serialize();
+		$.ajax({
+			url: "/ajax_url/",
+			type: 'POST',
+			data: datastring,
+				success: function(response) {
+				result = JSON.parse(response);  // Get the results sended from ajax to here
+            if (result.error) { // If the function fails
+                // Error
+                alert(result.error_text);
+            } else {  // Success
+
+                    //Here do whatever you need with the result;                                                  
+                } 
+		<!-- This function attempts to reduce server load by rejecting bad searches -->
+		<!-- In the future, I may also reject highly specific searches -->
+		CTFound = false
+		TFound = false
+		<!-- Test if there are actually  CTs or Ts present-->
+		for (i = 1; i <=5; i++)
+		{
+			if (document.getElementById('CT' + i + 'Status').value != 'Any'){
+				CTFound = true;
+				break;
+			} else if (document.getElementById('T' + i + 'Status').value != 'Any'){
+				TFound = true;
+				break;
+			}
+		}
+		<!-- Test for nades or CTs -->
+		if (NADES.length == 0 && TFound && CTFound){
+			alert("Your search has no nades or player positions!");
+		<!--  Confirm search -->
+		} else if (confirm("Would you like to start your DB query? Please note that this process may take a long time. Please verify that all of your settings are correct. Do not disconnect during the search.")==true) {
+					
+		}
+	}
+	
+
+</script>
