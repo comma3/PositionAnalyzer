@@ -1,6 +1,5 @@
     {% load staticfiles %}
 	
-	
 	<script type="text/javascript">
 	
 	function errorTest()
@@ -125,40 +124,9 @@
 		}
 	}
 	
-	function resetIcon(selectedIcon)
+	function deleteIcon(selectedIcon)
 	{
-		<!-- Could change to an array lookup  -->
-		iconspacing = 30;	
-		cursorX = 800;
-		cursorY = 522;
-		switch (selectedIcon)
-		{
-		case "T5":
-			cursorY = cursorY + iconspacing;
-		case "T4":
-			cursorY = cursorY + iconspacing;
-		case "T3":
-			cursorY = cursorY + iconspacing;
-		case "T2":
-			cursorY = cursorY + iconspacing;
-		case "T1":
-			cursorY = cursorY + iconspacing;
-		case "CT5":
-			cursorY = cursorY + iconspacing;
-		case "CT4":
-			cursorY = cursorY + iconspacing;
-		case "CT3":
-			cursorY = cursorY + iconspacing;
-		case "CT2":
-			cursorY = cursorY + iconspacing;
-		case "CT1":
-			break;
-		default:
-			cursorX = 100;
-			cursorY = 1;
-			break;
-		}
-		moveIcon(selectedIcon);
+		
 	}
 	
 	function resetPlayer(selectedPlayer)
