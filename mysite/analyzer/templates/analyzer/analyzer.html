@@ -33,7 +33,7 @@ document.onmousemove = function(e){
 <div class="row">
 <!-- Map Image -->
 	<div class="col-md-4">
-		<img src="{% static 'img/inferno_newcrop.png' %}" width="456" height="451" class="map" id="infernolistener" usemap="#inferno">
+		<img src="{% static 'img/inferno_newcrop.png' %}" width="456" height="451" class="map" id="maplistener" usemap="#listener">
 	</div>
 
 
@@ -69,17 +69,17 @@ document.onmousemove = function(e){
 		<textarea name="playerbox" id="playerbox" cols="59" rows="5" readonly="true" onclick="$('#playerbox').getSelection()"></textarea>
 		<div>
 			<b>Weapon:</b>
-			<select class="form-control input-sm" id="playertype" name="playertype" onchange="setActive('player')">
+			<select class="form-control input-sm" id="weapon" name="weapon" onchange="setActive('player')">
 				{% include "analyzer/includes/weaponsnippet.html" %}
 			</select>
 		</div>
 
 		<div class="btn-group">
-			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add T</button>
-			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add CT</button>
-			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Dead T</button>
-			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Dead CT</button>
-			<button type="button" onclick="clearNades()" class="btn btn-danger btn-sm">Remove All</button>
+			<button type="button" onclick="setActive('T')" class="btn btn-primary btn-sm">Add T</button>
+			<button type="button" onclick="setDead('T')" class="btn btn-primary btn-sm">Add Dead T</button>
+			<button type="button" onclick="setActive('CT')" class="btn btn-primary btn-sm">Add CT</button>
+			<button type="button" onclick="setDead('CT')" class="btn btn-primary btn-sm">Add Dead CT</button>
+			<button type="button" onclick="clearPlayers()" class="btn btn-danger btn-sm">Clear Players</button>
 		</div>
 
 
@@ -142,11 +142,7 @@ document.onmousemove = function(e){
 
 
 
-
-
-
-
-<map name="mapimage">
+<map name="#listener">
 	{% if map == inferno %}
 		{% include "analyzer/includes/infernomapcoords_test.html" %}
 	{% endif %}
