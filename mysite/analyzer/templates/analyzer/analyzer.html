@@ -18,11 +18,14 @@ var BOMBCOUNT = 0;
 var cursorX;
 var cursorY;
 
-document.onmousemove = function(e){
-    cursorX = e.pageX - 545;
-    cursorY = e.pageY - 47;
+function checkCursor() {
+	document.onmousemove = function(e){
+		cursorX = e.pageX - 545;
+		cursorY = e.pageY - 47;
 	}
-	setInterval(checkCursor, 250);
+}
+
+setInterval("checkCursor()", 250);
 	
 </script>
 
