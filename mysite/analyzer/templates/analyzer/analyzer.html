@@ -47,36 +47,27 @@ setInterval("checkCursor()", 250);
 
 <!-- Nade/bomb/player info -->
 	<div class="col-md-4">
-		<b>Nades:</b><br>
-		<textarea name="nadesbox" id="nadesbox" cols="59" rows="5" readonly="true" onclick="$('#nadesbox').getSelection()"></textarea>
-		<div>
-			<b>Nade/Bomb:</b>
-			<select class="form-control input-sm" id="nadetype" name="nadetype" onchange="setActive('nade')">
-				<option value="Smoke">Smoke</option>
-				<option value="Molly">Molly</option>
-				<option value="Flash">Flash</option>
-				<option value="HE">HE</option>
-				<option value="Decoy">Decoy</option>
-				<option value="bombdown">Bomb Down</option>
-				<option value="bombplanted">Bomb Planted</option>
-			</select>
-		</div>
+		<b>Game Objects:</b><br>
+		<textarea name="gameobjects" id="gameobjects" cols="59" rows="5" readonly="true" onclick="$('#gameobjects').getSelection()"></textarea>
 
+		<b>Nade/Bomb:</b>
 		<div class="btn-group">
-			<button type="button" onclick="setActive('nade')" class="btn btn-primary btn-sm">Add Nade</button>
+			<button type="button" onclick="setActive('smoke')" class="btn btn-primary btn-sm">Add Smoke</button>
+			<button type="button" onclick="setActive('flash')" class="btn btn-primary btn-sm">Add Flash</button>
+			<button type="button" onclick="setActive('molly')" class="btn btn-primary btn-sm">Add Molly</button>
+			<button type="button" onclick="setActive('he')" class="btn btn-primary btn-sm">Add HE</button>
+			<button type="button" onclick="setActive('decoy')" class="btn btn-primary btn-sm">Add Decoy</button>
+			<button type="button" onclick="setActive('bombdown')" class="btn btn-primary btn-sm">Add Bomb Down</button>
+			<button type="button" onclick="setActive('bombplanted')" class="btn btn-primary btn-sm">Add Bomb Planted</button>
 			<button type="button" onclick="clearNades()" class="btn btn-danger btn-sm">Remove All</button>
 		</div>
-		<br>
-		<br>
-		<b>Players:</b><br>
-		<textarea name="playerbox" id="playerbox" cols="59" rows="5" readonly="true" onclick="$('#playerbox').getSelection()"></textarea>
-		<div>
-			<b>Weapon:</b>
-			<select class="form-control input-sm" id="weapon" name="weapon" onchange="setActive('player')">
-				{% include "analyzer/includes/weaponsnippet.html" %}
-			</select>
-		</div>
 
+		<br>
+
+		<b>Weapon:</b>
+		<select class="form-control input-sm" id="weapon" name="weapon" onchange="setActive('player')">
+			{% include "analyzer/includes/weaponsnippet.html" %}
+		</select>
 		<div class="btn-group">
 			<button type="button" onclick="setActive('T')" class="btn btn-primary btn-sm">Add T</button>
 			<button type="button" onclick="setDead('T')" class="btn btn-primary btn-sm">Add Dead T</button>
@@ -84,7 +75,6 @@ setInterval("checkCursor()", 250);
 			<button type="button" onclick="setDead('CT')" class="btn btn-primary btn-sm">Add Dead CT</button>
 			<button type="button" onclick="clearPlayers()" class="btn btn-danger btn-sm">Clear Players</button>
 		</div>
-
 
 <!--End of middle column-->
 	</div>

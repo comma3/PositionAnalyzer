@@ -1,10 +1,5 @@
-from django.contrib import admin
 from analyzer.models import GameInfo, PlayerData, Nades
-
-
-
-    
-
+from django.contrib import admin
 
 admin.site.register(GameInfo)
 admin.site.register(PlayerData)

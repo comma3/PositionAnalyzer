@@ -1,12 +1,9 @@
-from django.shortcuts import render
-
-from django.db.models import Q, F
-
-from analyzer.models import GameInfo, PlayerData, Nades
-
-from functools import reduce
 import operator
+from functools import reduce
 
+from analyzer.models import PlayerData, Nades
+from django.db.models import Q, F
+from django.shortcuts import render
 
 precision = {"exact": 0, "tight": 1, "loose" : 2}
 
