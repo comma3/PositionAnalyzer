@@ -149,7 +149,11 @@
 		
 		// The django server replaces all of the templating so we need to hard code the switch in JavaScript
 		var newImage = document.createElement("img");
-		
+		newImage.setAttribute('id', 'icon');
+		//default settings, can be overridden in switch statement
+		newImage.setAttribute('height', '30px');
+		newImage.setAttribute('width', '30px');
+		newImage.setAttribute('class', 'icon');
 		switch (selectedIcon)
 		{
 			case "Smoke" :
@@ -178,9 +182,6 @@
 				newImage.setAttribute('src', "{% static 'img/Decoy.png' %}");
 		}
 
-		newImage.setAttribute('height', '30px');
-		newImage.setAttribute('width', '30px');
-		newImage.setAttribute('class', 'icon');
 		newImage.style.left = cursorX + "px";
 		newImage.style.top = cursorY + "px";
 		document.body.appendChild(newImage);
@@ -201,7 +202,10 @@
 		DECOYCOUNT = 0;
 		BOMBCOUNT = 0;
 		
-		resetAllIcons();
+		while (document.getElementById("icon"))
+		{
+			resetIcon("icon")
+		}
 	}
 	
 	//Consider refactoring to more accurate "deleteIcon"
@@ -211,28 +215,6 @@
 		icon.parentNode.removeChild(icon);
 	}
 	
-	function resetAllIcons()
-	{
-		for (i = 1; i <=5; i++)
-		{
-		resetIcon("CT"+i);
-		resetIcon("T"+i);
-		}
-
-		for (i = 1; i <=10; i++)
-		{
-			resetIcon("Smoke" + i);
-			resetIcon("Flash" + i);
-			<!-- Allows for up to 20 flashes -->
-			resetIcon("Flash" + (i + 10)); 
-			resetIcon("HE" + i);
-			resetIcon("Molly" + i);
-			resetIcon("Decoy" + i);
-		}
-		
-		resetIcon("bombdown");
-		resetIcon("bombplanted");
-	}
 	
 	function resetAll()
 	{
