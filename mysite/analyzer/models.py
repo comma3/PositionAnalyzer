@@ -1,16 +1,23 @@
 from django.db import models
 
+class MatchInfo(models.Model):
+
+    external_match_code = models.CharField(max_length=20)
+    played_map = models.CharField(max_length=20)
+    rank = models.IntegerField()
+    team_1 = models.CharField(max_length=40)
+    team_2 = models.CharField(max_length=40)
+    hltv_link = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.played_map + ' - ' + self.team_1 + ' - ' + self.team_2
+
 class GameInfo(models.Model):
 
-    rank = models.IntegerField()
-    played_map = models.CharField(max_length=20)
+    match = models.ForeignKey(MatchInfo, on_delete=models.CASCADE)
     t_score = models.IntegerField()
     ct_score = models.IntegerField()
     win_reason = models.CharField(max_length=20) #win_reason contains the winning team, so the winner might be unnecessary information
-    team_1 = models.CharField(max_length=40)
-    team_2 = models.CharField(max_length=40)
-    match_code = models.CharField(max_length=20)
-    demo_file = models.CharField(max_length=20)
 
     def __str__(self):
         return self.played_map + ' - ' + self.win_reason

@@ -4,10 +4,15 @@ sys.path.append("c:/users/matt/anaconda3/lib/site-packages")
 import requests
 from bs4 import BeautifulSoup
 import urllib
+import random
+
+alphanums = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 ####
 ####
-### TODO: Create unique name for matches here and create dictionary linking this name to hltv match link
+### TODO: Add dictionary to make sure that the primary key is unique and consider adding primary key + match link to db
+
+
 
 # https://www.hltv.org/results?offset=100&map=de_inferno
 # only working with inferno for now.
@@ -15,6 +20,7 @@ import urllib
 
 #exclude trailing / as it's included in the links obtained from site
 host = 'https://www.hltv.org'
+dl_location = 'D:\CSGOProGames\_rawfiles'
 
 # also going to just increment the offset in python rather than follow the url on the page
 offset = 0
@@ -23,6 +29,7 @@ all_links = []
 match_links = []
 dl_links = []
 dem_files = []
+hltvlink = []
 
 # Get all the links on the results page
 # filtered results page
@@ -44,24 +51,29 @@ for i,link in enumerate(match_links):
     req = requests.get("https://www.hltv.org{!s}".format(link))
     print(req)
     soup = BeautifulSoup(req.content, 'html.parser')
-    dl_links = soup.find_all('a', class_='flexbox left-right-padding') # GOTV demo class
+    dl_links.append(soup.find_all('a', class_='flexbox left-right-padding')) # GOTV demo class
     if i > 5:
         break
 
-for link in dl_links:
-    dem_files.append(link.get('href'))
+for link in zip(dl_links, match_links):
+    dem_files.append([link[0][0].get('href'),link[1]]) # Pairing download link with match info link for eventual use by user
 
 # From stack overflow: ...some sites (including Wikipedia) block on common non-browser user agents strings, like the
 # "Python-urllib/x.y" sent by Python's libraries. Even a plain "Mozilla" or "Opera" is usually enough to bypass that.
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
-headers = {'User-Agent': user_agent, }
+headers = {'User-Agent': user_agent,}
 
 for demdl in dem_files:
-    url = host + demdl
+    url = host + demdl[0]
     req = urllib.request.Request(url, None, headers)
     dl = urllib.request.urlopen(req)
     # DL link is a redirect
     # Get the file name from the url
-    filename = dl.geturl().split('/')[-1]
-    with open(filename, 'wb') as file:
+    primarykey = ''.join(random.choices(alphanums, k=8))  # high entropy string to create external id - help keep output files together
+    hltvlink.append(primarykey, demdl[1])
+    filename = primarykey + '_' + dl.geturl().split('/')[-1]
+    with open(dl_location + filename, 'wb') as file:
         file.write(dl.read())
+
+# with open(dl_location + 'hltvlinks.csv', 'wb') as tvlinks:
+#
