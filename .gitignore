@@ -5,7 +5,7 @@ __pycache__/
 
 # Settings file (contains sensitive information
 /mysite/mysite/settings.py
-# I don't know if the key can be obtained from this file but just in case
+# I don't know if the key can be obtained from this file but just in case (should be excluded anyway)
 /mysite/mysite/settings.pyc
 
 # C extensions
@@ -13,6 +13,10 @@ __pycache__/
 
 # Pycharm
 .idea/
+
+# Large CS related files
+*.rar
+*.dem
 
 # Distribution / packaging
 .Python
