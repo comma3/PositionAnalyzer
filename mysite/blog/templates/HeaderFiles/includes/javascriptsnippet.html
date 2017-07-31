@@ -32,7 +32,114 @@
 
 		chart.draw(data, options);
 	}
+
 	
+	function setActive(newObject)
+	{
+		if (BOMBCOUNT == 1 && (newObject == "BombDown" || newObject == "BombPlanted")) 
+		{
+			alert("You already have a bomb somewhere!");
+		} else if (newObject == "T" && TCOUNT > 5) {
+			alert("Too many Ts!");
+		} else if (newObject == "CT" && CTCOUNT > 5) {
+			alert("Too many CTs!");
+		} else {
+			OBJECT = newObject;
+		}
+	}
+	
+	//Special case of set active
+	function setDead(player)
+	{
+		if (player == "T" && TCOUNT >= 5) {
+			alert("Too many Ts!");
+		} else if (player == "CT" && CTCOUNT >= 5) {
+			alert("Too many CTs!");
+		} else if (player == "T") {
+			TCOUNT += 1
+			OBJECT = "null";
+			GAMEOBJECTS.push(player + " - Dead - Still dead");
+			gameobjectsbox.value=GAMEOBJECTS.join("\n");
+		} else if (player == "CT") {
+			CTCOUNT += 1
+			OBJECT = "null";
+			GAMEOBJECTS.push(player + " - Dead - Still dead");
+			gameobjectsbox.value=GAMEOBJECTS.join("\n");
+		}
+	}
+	
+	function setObjectPosition(positionID, selectedObject)
+	{
+		if (selectedObject != null)
+		{
+			switch (selectedObject) 
+			{
+				case "BombDown" :
+				case "BombPlanted" :
+				<!-- Too many bombs is handled by setActive, so setting a bomb can't be done. Could probably be hacked but it will just give zero results in the query.-->
+					BOMBCOUNT = BOMBCOUNT + 1;
+					insertIcon(nadetype);
+					selectedObject = nadetype.replace("BombDown", "Bomb Down").replace("BombPlanted", "Bomb Planted")
+					break;
+					
+				case "Smoke" :
+					SMOKECOUNT = SMOKECOUNT + 1;
+					if (SMOKECOUNT > 10){alert("More than 10 Smokes?");}
+					cursorX = cursorX - 7
+					cursorY = cursorY - 7
+					insertIcon(selectedObject + SMOKECOUNT);
+					break;
+				
+				case "Flash" : 
+					FLASHCOUNT = FLASHCOUNT + 1;
+					if (FLASHCOUNT > 20){alert("More than 20 Flashes?");}
+					cursorX = cursorX - 7
+					cursorY = cursorY - 7
+					insertIcon(selectedObject + FLASHCOUNT);
+					break;
+				
+				case "HE" : 
+					HECOUNT = HECOUNT + 1;
+					if (HECOUNT > 10){alert("More than 10 HEs?");}
+					cursorX = cursorX - 3
+					cursorY = cursorY - 3
+					insertIcon(selectedObject + HECOUNT);
+					break;
+				
+				case "Molly" : 
+					MOLLYCOUNT = MOLLYCOUNT + 1;
+					if (MOLLYCOUNT > 10){alert("More than 10 mollies?");}
+					cursorX = cursorX - 5
+					cursorY = cursorY - 10
+					insertIcon(selectedObject + MOLLYCOUNT);
+					break;
+				
+				case "Decoy" : 
+					DECOYCOUNT = DECOYCOUNT + 1;
+					if (DECOYCOUNT > 10){alert("More than 10 Decoys? Bold strategy.");}
+					insertIcon(selectedObject + DECOYCOUNT);
+					break;
+				
+				case "T" :
+					insertIcon(selectedObject + TCOUNT);
+					selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
+					break;
+					
+				case "CT" : 
+					selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
+					insertIcon(selectedObject + CTCOUNT);
+					break;
+					
+				default :
+					alert("You snuck a weird thing in!");
+					break;
+			}
+				
+			OBJECT = null;
+			GAMEOBJECTS.push(selectedObject + ' - ' + positionID)
+			gameobjectsbox.value=GAMEOBJECTS.join("\n");
+		}
+	}
 	
 	//TODO: Fix this!
 	function insertIcon(selectedIcon) 
@@ -60,154 +167,39 @@
 		t += offY;
 
 		var newImage = document.createElement("img");
-		newImage.setAttribute('src', '1.jpg');
+		newImage.setAttribute('src', "{% static 'img/1.jpg' %}");
 		newImage.setAttribute('class', 'overlays');
 		newImage.style.left = l + "px";
 		newImage.style.top = t + "px";
 		document.body.appendChild(newImage);
 	}
 	
+	//function insertIcon(selectedIcon)
+	//{
+	//    var avatar = document.getElementById(selectedIcon);
+	//	avatar.style.left = cursorX + "px";
+	//	avatar.style.top = cursorY + "px";	
+	//}
 	
-	function setObjectPosition(positionID, selectedObject)
+	function clearGameObjects()
 	{
-		if (selectedObject == "nade")
-		{
-			nadetype = document.getElementById("nadetype").value
-			switch (nadetype) 
-			{
-				case "bombdown" :
-				case "bombplanted" :
-				<!-- Too many bombs is handled by setActive, so setting a bomb can't be done. Could probably be hacked but it will just give zero results in the query.-->
-					BOMBCOUNT = BOMBCOUNT + 1;
-					moveIcon(nadetype);
-					nadetype = nadetype.replace("bombdown", "Bomb Down").replace("bombplanted", "Bomb Planted")
-					break;
-					
-				case "Smoke" :
-					SMOKECOUNT = SMOKECOUNT + 1;
-					if (SMOKECOUNT > 10){alert("More than 10 Smokes?");}
-					cursorX = cursorX - 7
-					cursorY = cursorY - 7
-					moveIcon(nadetype + SMOKECOUNT);
-					break;
-				
-				case "Flash" : 
-					FLASHCOUNT = FLASHCOUNT + 1;
-					if (FLASHCOUNT > 20){alert("More than 20 Flashes?");}
-					cursorX = cursorX - 7
-					cursorY = cursorY - 7
-					moveIcon(nadetype + FLASHCOUNT);
-					break;
-				
-				case "HE" : 
-					HECOUNT = HECOUNT + 1;
-					if (HECOUNT > 10){alert("More than 10 HEs?");}
-					cursorX = cursorX - 3
-					cursorY = cursorY - 3
-					moveIcon(nadetype + HECOUNT);
-					break;
-				
-				case "Molly" : 
-					MOLLYCOUNT = MOLLYCOUNT + 1;
-					if (MOLLYCOUNT > 10){alert("More than 10 mollies?");}
-					cursorX = cursorX - 5
-					cursorY = cursorY - 10
-					moveIcon(nadetype + MOLLYCOUNT);
-					break;
-				
-				case "Decoy" : 
-					DECOYCOUNT = DECOYCOUNT + 1;
-					if (DECOYCOUNT > 10){alert("More than 10 Decoys? Bold strategy.");}
-					moveIcon(nadetype + DECOYCOUNT);
-					break;
-					
-				default :
-					alert("You snuck a weird nade in!");
-					break;
-			}
-			
-			<!-- Add nade to list -->
-			OBJECT = "null";
-			NADES.push(nadetype + " " + positionID + " - " + document.getElementById("nadeprecision").value);
-			nadesbox.value=NADES.join("\n");
-			
-		} else if (selectedObject == "T") {
-			<!-- Add T to list -->
-			OBJECT = "null";
-			PLAYERS.push("T - " + document.getElementById("weapon").value + " - " + positionID);
-			playerbox.value=PLAYERS.join("\n");
-			
-		} else if (selectedObject == "CT") {
-			<!-- Add CT to list -->
-			OBJECT = "null";
-			PLAYERS.push("CT - " + document.getElementById("weapon").value + " - " + positionID);
-			playerbox.value=PLAYERS.join("\n");
-			
-		} else {
-			alert("Please select the object first!");
-		}
-	}
-	
-	
-	function moveIcon(selectedIcon)
-	{
-	    var avatar = document.getElementById(selectedIcon);
-		avatar.style.left = cursorX + "px";
-		avatar.style.top = cursorY + "px";	
-	}
-	
-	function setActive(newObject)
-	{
-		if (newObject == 'nade' && BOMBCOUNT == 1 && (document.getElementById("nadetype").value == "bombdown" || document.getElementById("nadetype").value == "bombplanted")) 
-		{
-			document.getElementById("nadetype").value = "Smoke"
-			alert("You already have a bomb somewhere!");
-		} else if (selectedObject == "T" && TCount > 5) {
-			alert("Too many Ts!");
-		} else if (selectedObject == "CT" && CTCount > 5) {
-			alert("Too many CTs!");
-		} else {
-			OBJECT = newObject;
-		}
-	}
-	
-	function setDead(player)
-	{
-		if (player == "T" && TCount > 5) {
-			alert("Too many Ts!");
-		} else if (player == "CT" && CTCount > 5) {
-			alert("Too many CTs!");
-		} else {
-			OBJECT = "null";
-			PLAYERS.push(player + " - Dead - Still dead");
-			playerbox.value=PLAYERS.join("\n");
-		}
-	}
-	
-	function clearPlayers()
-	{
-		PLAYERS.length = 0;
-		playerbox.value=PLAYERS.join("");
-		TCount = 0;
-		CTCount = 0;
-	}
-	
-	function clearNades()
-	{
-		NADES.length = 0;
-		<!-- check if this can be just NADES not NADES.join() -->
-		nadesbox.value=NADES.join("\n");
+		GAMEOBJECTS.length = 0;
+		gameobjectsbox.value=GAMEOBJECTS.join("\n");
+		
+		TCOUNT = 0;
+		CTCOUNT = 0;
 		SMOKECOUNT = 0;
 		FLASHCOUNT = 0;
 		HECOUNT = 0;
 		MOLLYCOUNT = 0;
 		DECOYCOUNT = 0;
 		BOMBCOUNT = 0;
-		resetNadeIcons();
+		
+		resetAllIcons();
 	}
 	
 	//Consider refactoring to more accurate "deleteIcon"
-	function resetIcon(icon)
+	function resetIcon(selectedIcon)
 	{
 		var icon = document.getElementById(selectedIcon);
 		icon.parentNode.removeChild(icon);
@@ -220,11 +212,7 @@
 		resetIcon("CT"+i);
 		resetIcon("T"+i);
 		}
-		resetNadeIcons();
-	}
-	
-	function resetNadeIcons()
-	{
+
 		for (i = 1; i <=10; i++)
 		{
 			resetIcon("Smoke" + i);
@@ -235,14 +223,14 @@
 			resetIcon("Molly" + i);
 			resetIcon("Decoy" + i);
 		}
+		
 		resetIcon("bombdown");
 		resetIcon("bombplanted");
 	}
 	
 	function resetAll()
 	{
-		clearNades();
-		clearPlayers();
+		clearGameObjects();
 		OBJECT = "null";			
 		drawResults();
 	}

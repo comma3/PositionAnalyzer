@@ -6,9 +6,8 @@
 
 document.getElementById("sidebartitle").innerhtml = "CSGO Position Analyzer";
 
-var OBJECT = "null";
-var NADES = [];
-var PLAYERS = [];
+var OBJECT = null;
+var GAMEOBJECTS = [];
 var SMOKECOUNT = 0;
 var FLASHCOUNT = 0;
 var HECOUNT = 0;
@@ -25,7 +24,7 @@ function checkCursor() {
 	}
 }
 
-setInterval("checkCursor()", 250);
+setInterval("checkCursor()", 100);
 	
 </script>
 
@@ -48,24 +47,23 @@ setInterval("checkCursor()", 250);
 <!-- Nade/bomb/player info -->
 	<div class="col-md-4">
 		<b>Game Objects:</b><br>
-		<textarea name="gameobjects" id="gameobjects" cols="59" rows="5" readonly="true" onclick="$('#gameobjects').getSelection()"></textarea>
+		<textarea name="gameobjectsbox" id="gameobjectsbox" cols="59" rows="5" readonly="true" onclick="$('#gameobjectsbox').getSelection()"></textarea>
 
 		<b>Nade/Bomb:</b>
 		<div class="btn-group">
-			<button type="button" onclick="setActive('smoke')" class="btn btn-primary btn-sm">Add Smoke</button>
-			<button type="button" onclick="setActive('flash')" class="btn btn-primary btn-sm">Add Flash</button>
-			<button type="button" onclick="setActive('molly')" class="btn btn-primary btn-sm">Add Molly</button>
-			<button type="button" onclick="setActive('he')" class="btn btn-primary btn-sm">Add HE</button>
-			<button type="button" onclick="setActive('decoy')" class="btn btn-primary btn-sm">Add Decoy</button>
-			<button type="button" onclick="setActive('bombdown')" class="btn btn-primary btn-sm">Add Bomb Down</button>
-			<button type="button" onclick="setActive('bombplanted')" class="btn btn-primary btn-sm">Add Bomb Planted</button>
-			<button type="button" onclick="clearNades()" class="btn btn-danger btn-sm">Remove All</button>
+			<button type="button" onclick="setActive('Smoke')" class="btn btn-primary btn-sm">Add Smoke</button>
+			<button type="button" onclick="setActive('Flash')" class="btn btn-primary btn-sm">Add Flash</button>
+			<button type="button" onclick="setActive('Molly')" class="btn btn-primary btn-sm">Add Molly</button>
+			<button type="button" onclick="setActive('HE')" class="btn btn-primary btn-sm">Add HE</button>
+			<button type="button" onclick="setActive('Decoy')" class="btn btn-primary btn-sm">Add Decoy</button>
+			<button type="button" onclick="setActive('BombDown')" class="btn btn-primary btn-sm">Add Bomb Down</button>
+			<button type="button" onclick="setActive('BombPlanted')" class="btn btn-primary btn-sm">Add Bomb Planted</button>
 		</div>
 
 		<br>
 
 		<b>Weapon:</b>
-		<select class="form-control input-sm" id="weapon" name="weapon" onchange="setActive('player')">
+		<select class="form-control input-sm" id="weapon" name="weapon">
 			{% include "analyzer/includes/weaponsnippet.html" %}
 		</select>
 		<div class="btn-group">
@@ -73,7 +71,7 @@ setInterval("checkCursor()", 250);
 			<button type="button" onclick="setDead('T')" class="btn btn-primary btn-sm">Add Dead T</button>
 			<button type="button" onclick="setActive('CT')" class="btn btn-primary btn-sm">Add CT</button>
 			<button type="button" onclick="setDead('CT')" class="btn btn-primary btn-sm">Add Dead CT</button>
-			<button type="button" onclick="clearPlayers()" class="btn btn-danger btn-sm">Clear Players</button>
+			<button type="button" onclick="clearGameObjects()" class="btn btn-danger btn-sm">Clear Board</button>
 		</div>
 
 <!--End of middle column-->
@@ -131,8 +129,6 @@ setInterval("checkCursor()", 250);
 		<h3>Results:</h3>
 		<div id="piechart" style="width: 400px; height: 300px;"></div>
 	</div>
-
-
 
 
 <map name="#listener">
