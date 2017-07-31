@@ -121,8 +121,8 @@
 					break;
 				
 				case "T" :
-					insertIcon(selectedObject);
 					selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
+					insertIcon(selectedObject);
 					break;
 					
 				case "CT" : 
@@ -136,7 +136,7 @@
 			}
 				
 			OBJECT = null;
-			GAMEOBJECTS.push(selectedObject + ' - ' + positionID)
+			GAMEOBJECTS.push(selectedObject + ' - ' + positionID);
 			gameobjectsbox.value=GAMEOBJECTS.join("\n");
 		}
 	}
@@ -151,25 +151,37 @@
 		var newImage = document.createElement("img");
 		newImage.setAttribute('id', 'icon');
 		//default settings, can be overridden in switch statement
-		newImage.setAttribute('height', '30px');
-		newImage.setAttribute('width', '30px');
+		// Currently defaults to player icon size because there are many more weapons
+		newImage.setAttribute('height', '15px');
+		newImage.setAttribute('width', '15px');
 		newImage.setAttribute('class', 'icon');
+		console.log(selectedIcon);
 		switch (selectedIcon)
 		{
 			case "Smoke" :
+				newImage.setAttribute('height', '30px');
+				newImage.setAttribute('width', '30px');
 				newImage.setAttribute('src', "{% static 'img/Smoke.png' %}");
 				break;
 			case "Flash" :
+				newImage.setAttribute('height', '30px');
+				newImage.setAttribute('width', '30px');
 				newImage.setAttribute('src', "{% static 'img/Flash.png' %}")
 				newImage.setAttribute('style', "opacity:0.6");
 				break;
 			case "Molly" :
+				newImage.setAttribute('height', '30px');
+				newImage.setAttribute('width', '30px');
 				newImage.setAttribute('src', "{% static 'img/Molly.png' %}");
 				break;
 			case "HE" :
+				newImage.setAttribute('height', '30px');
+				newImage.setAttribute('width', '30px');
 				newImage.setAttribute('src', "{% static 'img/HE.png' %}");
 				break;
 			case "Decoy" :
+				newImage.setAttribute('height', '30px');
+				newImage.setAttribute('width', '30px');
 				newImage.setAttribute('src', "{% static 'img/Decoy.png' %}");
 				break;		
 			case "BombDown" :
@@ -177,6 +189,12 @@
 				break;
 			case "BombPlanted" :
 				newImage.setAttribute('src', "{% static 'img/bombplanted.png' %}");
+				break;
+			case "T - Any" :
+				newImage.setAttribute('src', "{% static 'img/T - Any.png' %}");
+				break;
+			case "CT - Any" :
+				newImage.setAttribute('src', "{% static 'img/CT - Any.png' %}");
 				break;
 			default :
 				newImage.setAttribute('src', "{% static 'img/Decoy.png' %}");
@@ -204,17 +222,15 @@
 		
 		while (document.getElementById("icon"))
 		{
-			resetIcon("icon")
+			removeIcon("icon");
 		}
 	}
 	
-	//Consider refactoring to more accurate "deleteIcon"
-	function resetIcon(selectedIcon)
+	function removeIcon(selectedIcon)
 	{
 		var icon = document.getElementById(selectedIcon);
 		icon.parentNode.removeChild(icon);
 	}
-	
 	
 	function resetAll()
 	{
@@ -233,7 +249,7 @@
           ['Time',  {{Time}}],
           ['TKills', {{TKill}}],
           ['Target Bombed', {{TargetBombed}}],
-        ]);	
+        ]);
 		
 		drawChart(data);
 	}
