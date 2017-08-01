@@ -3,7 +3,6 @@ from django.db import models
 class MatchInfo(models.Model):
 
     external_match_code = models.CharField(max_length=20)
-    played_map = models.CharField(max_length=20)
     rank = models.IntegerField()
     team_1 = models.CharField(max_length=40)
     team_2 = models.CharField(max_length=40)
@@ -15,6 +14,7 @@ class MatchInfo(models.Model):
 class GameInfo(models.Model):
 
     match = models.ForeignKey(MatchInfo, on_delete=models.CASCADE)
+    played_map = models.CharField(max_length=20) # This can't be in matchinfo because matches can have multiple maps - not ideal for memory usages but should make sql easier
     t_score = models.IntegerField()
     ct_score = models.IntegerField()
     win_reason = models.CharField(max_length=20) #win_reason contains the winning team, so the winner might be unnecessary information
