@@ -7,7 +7,7 @@ class MatchInfo(models.Model):
     rank = models.IntegerField()
     team_1 = models.CharField(max_length=40)
     team_2 = models.CharField(max_length=40)
-    hltv_link = models.CharField(max_length=100)
+    hltv_link = models.CharField(max_length=100, unique=True) #want to ensure that DB doesn't include duplicates
 
     def __str__(self):
         return self.played_map + ' - ' + self.team_1 + ' - ' + self.team_2
