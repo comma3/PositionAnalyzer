@@ -6,9 +6,6 @@ import random
 # used for external key generation
 alphanums = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-### TODO: Add dictionary or sql query from db to make sure that the match link and ext code are unique (1/10^15 but still...)
-### use a dictionary with the match link as the key so we can avoid downloading duplicates
-
 def hltv_demscraper(site, dl_location):
     # exclude trailing / in site as it's included in the links obtained from site
 
@@ -59,11 +56,12 @@ def hltv_demscraper(site, dl_location):
         dl = urllib.request.urlopen(req)
         # DL link is a redirect
         # Get the file name from the url
-
         hltv_links.append([demdl[1], external_code])
         filename = external_code + '_' + dl.geturl().split('/')[-1]
         with open(dl_location + filename, 'wb') as file:
             file.write(dl.read())
 
+
+
 if __name__ == '__main__':
-    hltv_demscraper('https://www.hltv.org','D:/CSGOProGames/_rawfiles/')
+    hltv_demscraper('https://www.hltv.org','D:/CSGOProGames/!rarfiles/')

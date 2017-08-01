@@ -21,4 +21,4 @@ def hltv_unrar(dl_location, processed_location):
             os.rename(dl_location + dem, processed_location + extcode + '_' + dem)
 
 if __name__ == '__main__':
-    hltv_unrar('D:/CSGOProGames/!rawfiles/', 'D:/CSGOProGames/!processedfiles/')
+    hltv_unrar('D:/CSGOProGames/!rarfiles/', 'D:/CSGOProGames/!demofiles/')
