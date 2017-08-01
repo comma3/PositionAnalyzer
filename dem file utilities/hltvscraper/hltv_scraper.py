@@ -75,13 +75,14 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
         except:
             errors.append([filename, url, req])
 
-    with open(dl_location + 'ExternalCodes.csv', 'wb') as csvfile:
-        matchwriter = csv.writer(csvfile, delimiter=',')
+    # TODO: Refactor this with my library
+    with open(dl_location + 'ExternalCodes.csv', 'w') as csvfile:
+        matchwriter = csv.writer(csvfile, delimiter=',', newline='\n')
         for row in hltv_links:
             matchwriter.writerow(row)
 
-    with open(dl_location + 'Errors.csv', 'wb') as csvfile:
-        errorwriter = csv.writer(csvfile, delimiter=',')
+    with open(dl_location + 'Errors.csv', 'w') as csvfile:
+        errorwriter = csv.writer(csvfile, delimiter=',', newline='\n')
         for row in errors:
             errorwriter.writerow(row)
 

@@ -11,6 +11,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Static Files
+mysite/analyzer/static/
+mysite/blog/static/
+
 # Pycharm
 .idea/
 
