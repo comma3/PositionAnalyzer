@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup
 import urllib
 import random
 import time
+import datetime
+import csv
 
 # used for external key generation
 alphanums = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-def hltv_demscraper(site, dl_location):
+def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!rarfiles/'):
     # exclude trailing / in site as it's included in the links obtained from site
 
     # Going to just increment the offset in the GET request in python rather than follow the url on the page
@@ -17,11 +19,12 @@ def hltv_demscraper(site, dl_location):
     match_links = []
     dl_links = []
     hltv_links = []
+    errors = []
 
     # Get all the links on the results page
     # filtered results page
     while offset <= 99: # get most recent 600 games ~3 mos worth
-        req = requests.get(site + "/results?map=de_inferno&offset={!s}".format(offset))
+        req = requests.get(site + "/results?offset={!s}".format(offset))
         print('HLTV result page status:')
         print(req)  # gives html status code
         soup = BeautifulSoup(req.content, 'html.parser')
@@ -40,7 +43,7 @@ def hltv_demscraper(site, dl_location):
         soup = BeautifulSoup(req.content, 'html.parser')
         # Get the download link from the match page and pair it with the match link for use by users to find exact games
         dl_links.append([soup.find_all('a', class_='flexbox left-right-padding')[0].get('href'), link]) # GOTV demo class
-        if i > 5:
+        if i > 2:
             break
 
     # From stack overflow: ...some sites (including Wikipedia) block on common non-browser user agents strings, like the
@@ -49,22 +52,38 @@ def hltv_demscraper(site, dl_location):
     headers = {'User-Agent': user_agent,}
 
     for demdl in dl_links:
-        if time.time()
+        try: # Keep chugging if there's an error
+            # Download files from 1 am until noon while I'm away.
+            if datetime.datetime.now().hour > 12:
+                # Sleep until
+                print('Sleeping... ' + datetime.datetime.now().strftime("%c"))
+                time.sleep(1) # sleep time in seconds (hours * mins * seconds)
+                print('Back to work! ' + datetime.datetime.now().strftime("%c"))
 
-        # Generate high entropy string to create external id - help keep output files together
-        external_code = ''.join(random.choices(alphanums, k=8))
-        print('Downloading ' + demdl[1])
-        url = site + demdl[0]
-        req = urllib.request.Request(url, None, headers)
-        dl = urllib.request.urlopen(req)
-        # DL link is a redirect
-        # Get the file name from the url
-        hltv_links.append([demdl[1], external_code])
-        filename = external_code + '_' + dl.geturl().split('/')[-1]
-        with open(dl_location + filename, 'wb') as file:
-            file.write(dl.read())
+            # Generate high entropy string to create external id - help keep output files together
+            external_code = ''.join(random.choices(alphanums, k=8))
+            print('Downloading ' + demdl[1])
+            url = site + demdl[0]
+            req = urllib.request.Request(url, None, headers)
+            dl = urllib.request.urlopen(req)
+            # DL link is a redirect
+            # Get the file name from the url
+            hltv_links.append([demdl[1], external_code])
+            filename = external_code + '_' + dl.geturl().split('/')[-1]
+            with open(dl_location + filename, 'wb') as file:
+                file.write(dl.read())
+        except:
+            errors.append([filename, url, req])
 
+    with open(dl_location + 'ExternalCodes.csv', 'wb') as csvfile:
+        matchwriter = csv.writer(csvfile, delimiter=',')
+        for row in hltv_links:
+            matchwriter.writerow(row)
 
+    with open(dl_location + 'Errors.csv', 'wb') as csvfile:
+        errorwriter = csv.writer(csvfile, delimiter=',')
+        for row in errors:
+            errorwriter.writerow(row)
 
 if __name__ == '__main__':
-    hltv_demscraper('https://www.hltv.org','D:/CSGOProGames/!rarfiles/')
+    hltv_demscraper()

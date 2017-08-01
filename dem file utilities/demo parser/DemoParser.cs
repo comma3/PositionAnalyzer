@@ -109,7 +109,7 @@ namespace CSPositionAnalyzer
                         outputStreamPlayerData.WriteLine(GenerateCSVHeader()); // This was modified from statistics generator so I just used his method.
                         outputStreamNades.WriteLine(string.Format("Tick,Time,Round,CTScore,TScore,Thrower,Type,XPos,YPos,ZPos"));
                         outputStreamGameData.WriteLine(string.Format("Tick,Time,Round,CTScore,TScore,Reason"));
-                        outputStreamMatchInfo.WriteLine(string.Format("Match Code,Map,Avg Rank,Team 1,Team 2, HLTV Link"));
+                        outputStreamMatchInfo.WriteLine(string.Format("Match Code,Map,Avg Rank,Team 1,Team 2"));
 
                         // Cool! Now let's get started generating the analysis-data. 
                         // Let's just declare some stuff we need to remember
@@ -385,7 +385,7 @@ namespace CSPositionAnalyzer
 
                         //parser.CTClanName seems to be empty by here
                         //team names are stored above
-                        outputStreamMatchInfo.WriteLine(string.Format("{0},{1},{2},{3},{4},{5}", matchcode, map, avgrank, CTTeamName, TTeamName, fileName));
+                        outputStreamMatchInfo.WriteLine(string.Format("{0},{1},{2},{3},{4}", matchcode, map, avgrank, CTTeamName, TTeamName));
 
                         outputStreamPlayerData.Close();
                         outputStreamNades.Close();
