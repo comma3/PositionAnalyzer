@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import random
+import time
 
 # used for external key generation
 alphanums = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -48,6 +49,8 @@ def hltv_demscraper(site, dl_location):
     headers = {'User-Agent': user_agent,}
 
     for demdl in dl_links:
+        if time.time()
+
         # Generate high entropy string to create external id - help keep output files together
         external_code = ''.join(random.choices(alphanums, k=8))
         print('Downloading ' + demdl[1])
