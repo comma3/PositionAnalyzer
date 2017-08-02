@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.dll
 
 # Settings file (contains sensitive information
 /mysite/mysite/settings.py
