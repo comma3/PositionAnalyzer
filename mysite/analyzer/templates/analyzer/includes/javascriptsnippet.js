@@ -13,6 +13,8 @@
 			alert("No games matched your search. Consider removing some limited factors.");
 			resetAll();			
 		}
+		
+		document.getElementById("sidebartitle").innerHTML = "CSGO Position Analyzer";
 	}
 	
 	<!-- Pie Chart Code -->	
@@ -253,6 +255,26 @@
 		
 		drawChart(data);
 	}
+	
+	var OBJECT = null;
+	var GAMEOBJECTS = [];
+	var SMOKECOUNT = 0;
+	var FLASHCOUNT = 0;
+	var HECOUNT = 0;
+	var MOLLYCOUNT = 0;
+	var DECOYCOUNT = 0;
+	var BOMBCOUNT = 0;
+	var cursorX;
+	var cursorY;
+
+	function checkCursor() {
+		document.onmousemove = function(e){
+			cursorX = e.pageX;
+			cursorY = e.pageY;
+		}
+	}
+
+	setInterval("checkCursor()", 100);
 	
 	
 
