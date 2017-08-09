@@ -28,7 +28,7 @@ class PlayerData(models.Model):
     game = models.ForeignKey(GameInfo, on_delete=models.CASCADE)
     time = models.DecimalField(max_digits=6, decimal_places=4) #This time comes when on tick intervals (1/16 currently or 0.5s), so they do not match PlayerData time stamps, which log times when nades are thrown.
     team = models.CharField(max_length=20)
-    playernum = models.IntegerField()
+    playernum = models.IntegerField() # maybe get rid of this?
     XPos = models.DecimalField(max_digits=6, decimal_places=4)
     YPos = models.DecimalField(max_digits=6, decimal_places=4)
     ZPos = models.DecimalField(max_digits=6, decimal_places=4)

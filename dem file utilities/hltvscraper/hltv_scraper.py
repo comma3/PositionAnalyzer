@@ -4,13 +4,18 @@ import urllib
 import random
 import time
 import datetime
-import csv
+import string
+import MFLibrary.csv_functions
 
 # used for external key generation
-alphanums = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+alphanums = string.ascii_letters + string.digits
 
 def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!rarfiles/'):
     # exclude trailing / in site as it's included in the links obtained from site
+    #
+    # print("Sleeping until 1 am on initial run.")
+    # time.sleep(20000)
+    # print("Getting up to work.")
 
     # Going to just increment the offset in the GET request in python rather than follow the url on the page
     offset = 0
@@ -23,14 +28,21 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
 
     # Get all the links on the results page
     # filtered results page
-    while offset <= 99: # get most recent 600 games ~3 mos worth
-        req = requests.get(site + "/results?offset={!s}".format(offset))
-        print('HLTV result page status:')
-        print(req)  # gives html status code
-        soup = BeautifulSoup(req.content, 'html.parser')
-        all_links = soup.find_all('a', class_='a-reset') # class from html that holds the urls (result-con didn't work...?)
-        offset += 100 # hltv.org shows 100 results per page (didn't bother to check if there is a way to change this value).
+    while offset <= 200: # get most recent 600 games ~3 mos worth
+        try:
+            req = requests.get(site + "/results?offset={!s}".format(offset))
+            print('HLTV result page status:')
+            print(req)  # gives html status code
+            soup = BeautifulSoup(req.content, 'html.parser')
+            all_links = soup.find_all('a', class_='a-reset') # class from html that holds the urls (result-con didn't work...?)
+            offset += 100 # hltv.org shows 100 results per page (didn't bother to check if there is a way to change this value).
+        except:
+            # Got rejected once or twice
+            # Wait 1 minute and try again
+            time.sleep(60)
+            pass
 
+    print("Got links!")
     # filtering incorrect links by getting rid of forum, vod, blog, etc. links
     for link in all_links:
         link = link.get('href')
@@ -38,27 +50,36 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
             match_links.append(link)
 
     # following correct match links to find download links
-    for i,link in enumerate(match_links):
+    i = 0
+    for link in match_links:
+        i += 1
         req = requests.get("https://www.hltv.org{!s}".format(link))
         soup = BeautifulSoup(req.content, 'html.parser')
         # Get the download link from the match page and pair it with the match link for use by users to find exact games
-        dl_links.append([soup.find_all('a', class_='flexbox left-right-padding')[0].get('href'), link]) # GOTV demo class
+        try:
+            dl_links.append([soup.find_all('a', class_='flexbox left-right-padding')[0].get('href'), link]) # GOTV demo class
+        except IndexError:
+            # Sometimes matches don't have uploaded DEM files
+            errors.append("Issue finding dem file (probably does not exist)", link, req)
         if i > 2:
             break
 
     # From stack overflow: ...some sites (including Wikipedia) block on common non-browser user agents strings, like the
-    # "Python-urllib/x.y" sent by Python's libraries. Even a plain "Mozilla" or "Opera" is usually enough to bypass that.
+    # "Python-urllib/x.y" sent by Python's libraries. Even a plain "Mozilla" or "Opera" is usually enough to bypass that
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent,}
 
     for demdl in dl_links:
-        try: # Keep chugging if there's an error
-            # Download files from 1 am until noon while I'm away.
-            if datetime.datetime.now().hour > 12:
-                # Sleep until
-                print('Sleeping... ' + datetime.datetime.now().strftime("%c"))
-                time.sleep(1) # sleep time in seconds (hours * mins * seconds)
-                print('Back to work! ' + datetime.datetime.now().strftime("%c"))
+        try:  # Keep chugging if there's an error
+            ##
+            ## Not going to use this today
+            ##
+            # # Download files from 1 am until noon while I'm away.
+            # if datetime.datetime.now().hour > 12:
+            #     # Sleep until
+            #     print('Sleeping... ' + datetime.datetime.now().strftime("%c"))
+            #     time.sleep(13*60*60) # sleep time in seconds (hours * mins * seconds)
+            #     print('Back to work! ' + datetime.datetime.now().strftime("%c"))
 
             # Generate high entropy string to create external id - help keep output files together
             external_code = ''.join(random.choices(alphanums, k=8))
@@ -73,18 +94,14 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
             with open(dl_location + filename, 'wb') as file:
                 file.write(dl.read())
         except:
-            errors.append([filename, url, req])
+            errors.append(["Issue during download", filename, url, req])
+            # wait 2 minutes before trying again
+            time.sleep(120)
 
-    # TODO: Refactor this with my library
-    with open(dl_location + 'ExternalCodes.csv', 'w') as csvfile:
-        matchwriter = csv.writer(csvfile, delimiter=',', newline='\n')
-        for row in hltv_links:
-            matchwriter.writerow(row)
-
-    with open(dl_location + 'Errors.csv', 'w') as csvfile:
-        errorwriter = csv.writer(csvfile, delimiter=',', newline='\n')
-        for row in errors:
-            errorwriter.writerow(row)
+    # Output key for external code to match link
+    MFLibrary.csv_functions.writeListToCSV('D:/CSGOProGames/!processedfiles/!ExternalCodes.csv', hltv_links)
+    # Output any encountered errors that were skipped
+    MFLibrary.csv_functions.writeListToCSV(dl_location + '!Errors.csv', errors)
 
 if __name__ == '__main__':
     hltv_demscraper()

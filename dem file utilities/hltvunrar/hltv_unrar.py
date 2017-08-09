@@ -16,6 +16,9 @@ def hltv_unrar(dl_location='D:/CSGOProGames/!rarfiles/', processed_location='D:/
         try:
             rar = rarfile.RarFile(file)
         except:
+            print("++++++++++RAR ISSUE++++++++++")
+            print(file)
+            print("++++++++++RAR ISSUE++++++++++")
             continue
         rar.extractall(path=dl_location)
         extcode = file.split('\\')[-1].split('_')[0]
