@@ -64,7 +64,7 @@ def hltv_demscraper(match_links, site='https://www.hltv.org', dl_location='D:/CS
             dl_links.append([soup.find_all('a', class_='flexbox left-right-padding')[0].get('href'), link]) # GOTV demo class
         except IndexError:
             # Sometimes matches don't have uploaded DEM files
-            errors.append("Issue finding dem file (probably does not exist)", link, req)
+            errors.append(["Issue finding dem file (probably does not exist)", link, req])
 
     # From stack overflow: ...some sites (including Wikipedia) block on common non-browser user agents strings, like the
     # "Python-urllib/x.y" sent by Python's libraries. Even a plain "Mozilla" or "Opera" is usually enough to bypass that
@@ -73,15 +73,16 @@ def hltv_demscraper(match_links, site='https://www.hltv.org', dl_location='D:/CS
 
     for demdl in dl_links:
         try:  # Keep chugging if there's an error
-            ##
-            ## Not going to use this today
-            ##
-            # # Download files from 1 am until noon while I'm away.
-            # if datetime.datetime.now().hour > 12:
-            #     # Sleep until
-            #     print('Sleeping... ' + datetime.datetime.now().strftime("%c"))
-            #     time.sleep(13*60*60) # sleep time in seconds (hours * mins * seconds)
-            #     print('Back to work! ' + datetime.datetime.now().strftime("%c"))
+            # TODO: refactor so that external id is generated during extraction not download - too much potential for errors
+
+            # Download files until 4:30 (don't want to hog internet).
+
+            # TODO: This isn't working correctly
+            if datetime.datetime.now().hour > 16 and datetime.datetime.now().minute > 30:
+                # Sleep until 12:30 am
+                print('Sleeping... ' + datetime.datetime.now().strftime("%c"))
+                time.sleep(8*60*60)  # sleep time in seconds (hours * mins * seconds)
+                print('Back to work! ' + datetime.datetime.now().strftime("%c"))
 
             # Generate high entropy string to create external id - help keep output files together
             external_code = ''.join(random.choices(alphanums, k=8))
