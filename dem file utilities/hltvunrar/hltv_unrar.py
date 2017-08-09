@@ -7,7 +7,7 @@ os.environ['UNRAR_LIB_PATH'] = 'C:/Program Files (x86)/UnrarDLL/UnRAR.dll'
 from unrar import rarfile
 
 
-def hltv_unrar(dl_location='D:/CSGOProGames/!rarfiles/', processed_location='D:/CSGOProGames/!demofiles/'):
+def hltv_unrar(dl_location='D:/CSGOProGames/rar/', processed_location='D:/CSGOProGames/demos/'):
 
     if not os.path.exists(processed_location):
         os.mkdir(processed_location)

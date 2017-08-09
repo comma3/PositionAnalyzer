@@ -10,7 +10,7 @@ import MFLibrary.csv_functions
 # used for external key generation
 alphanums = string.ascii_letters + string.digits
 
-def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!rarfiles/'):
+def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/rar/'):
     # exclude trailing / in site as it's included in the links obtained from site
     #
     # print("Sleeping until 1 am on initial run.")
@@ -28,7 +28,7 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
 
     # Get all the links on the results page
     # filtered results page
-    while offset <= 200: # get most recent 600 games ~3 mos worth
+    while offset <= 1000: # get most recent 1000 matches ~3 mos worth
         try:
             req = requests.get(site + "/results?offset={!s}".format(offset))
             print('HLTV result page status:')
@@ -50,9 +50,8 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
             match_links.append(link)
 
     # following correct match links to find download links
-    i = 0
+
     for link in match_links:
-        i += 1
         req = requests.get("https://www.hltv.org{!s}".format(link))
         soup = BeautifulSoup(req.content, 'html.parser')
         # Get the download link from the match page and pair it with the match link for use by users to find exact games
@@ -61,8 +60,6 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
         except IndexError:
             # Sometimes matches don't have uploaded DEM files
             errors.append("Issue finding dem file (probably does not exist)", link, req)
-        if i > 2:
-            break
 
     # From stack overflow: ...some sites (including Wikipedia) block on common non-browser user agents strings, like the
     # "Python-urllib/x.y" sent by Python's libraries. Even a plain "Mozilla" or "Opera" is usually enough to bypass that
@@ -99,7 +96,7 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/!r
             time.sleep(120)
 
     # Output key for external code to match link
-    MFLibrary.csv_functions.writeListToCSV('D:/CSGOProGames/!processedfiles/!ExternalCodes.csv', hltv_links)
+    MFLibrary.csv_functions.writeListToCSV('D:/CSGOProGames/processed/!ExternalCodes.csv', hltv_links)
     # Output any encountered errors that were skipped
     MFLibrary.csv_functions.writeListToCSV(dl_location + '!Errors.csv', errors)
 
