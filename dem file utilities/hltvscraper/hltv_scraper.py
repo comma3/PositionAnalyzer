@@ -10,25 +10,14 @@ import MFLibrary.csv_functions
 # used for external key generation
 alphanums = string.ascii_letters + string.digits
 
-def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/rar/'):
-    # exclude trailing / in site as it's included in the links obtained from site
-    #
-    # print("Sleeping until 1 am on initial run.")
-    # time.sleep(20000)
-    # print("Getting up to work.")
+def get_match_links(searchdepth, site='https://www.hltv.org'):
+    """Gets all the links on the results page"""
 
     # Going to just increment the offset in the GET request in python rather than follow the url on the page
     offset = 0
-    # using underscore for readability
-    all_links = []
     match_links = []
-    dl_links = []
-    hltv_links = []
-    errors = []
 
-    # Get all the links on the results page
-    # filtered results page
-    while offset <= 1000: # get most recent 1000 matches ~3 mos worth
+    while offset <= searchdepth: # get most recent 1000 matches ~3 mos worth
         try:
             req = requests.get(site + "/results?offset={!s}".format(offset))
             print('HLTV result page status:')
@@ -48,6 +37,22 @@ def hltv_demscraper(site='https://www.hltv.org', dl_location='D:/CSGOProGames/ra
         link = link.get('href')
         if 'matches' in link:
             match_links.append(link)
+
+    return match_links
+
+
+# This could be refactored further.
+def hltv_demscraper(match_links, site='https://www.hltv.org', dl_location='D:/CSGOProGames/rar/'):
+    # exclude trailing / in site as it's included in the links obtained from site
+    #
+    # print("Sleeping until 1 am on initial run.")
+    # time.sleep(20000)
+    # print("Getting up to work.")
+
+    # using underscore for readability
+    dl_links = []
+    hltv_links = []
+    errors = []
 
     # following correct match links to find download links
 
