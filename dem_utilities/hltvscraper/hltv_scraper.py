@@ -26,11 +26,11 @@ def get_match_links(searchdepth=100, site='https://www.hltv.org'):
     offset = 0
     # Keep a running list of match links so we don't get duplicates
     # TODO: Change to sql query after db is populated
-    match_db = mf.csv.read_to_list('match_db.csv')
+    match_db = mf.csv.read_list('match_db.csv')
 
     match_links = []
 
-    while offset <= searchdepth: # get most recent 1000 matches ~3 mos worth
+    while offset <= searchdepth:  # get most recent N matches
         try:
             req = requests.get(site + "/results?offset={!s}".format(offset))
             print('HLTV result page status:')
@@ -59,7 +59,7 @@ def get_match_links(searchdepth=100, site='https://www.hltv.org'):
     return match_links
 
 
-def find_demo_links(match_links, site='https://www.hltv.org', outputpath='D:/CSGOProGames/processed'):
+def find_demo_links(match_links, site='https://www.hltv.org', outputpath='D:/CSGOProGames/processed/'):
     """Find the actual demo file download link and output a list of match links (for end users),
     demo dl links, and external ids"""
 
@@ -77,7 +77,8 @@ def find_demo_links(match_links, site='https://www.hltv.org', outputpath='D:/CSG
             print(["Issue finding dem file (probably does not exist)", link, req])
 
     print(dl_links)
-    mf.csv.write_to_list(outputpath + "links_extid.csv")
+    # Include Date + hour in case it gets run twice in a day
+    mf.csv.write_list(outputpath + datetime.datetime.now().strftime("%Y-%m-%d-%H_links_extid.csv"), dl_links)
     return dl_links
 
 
@@ -89,8 +90,9 @@ def download_dems(dl_links, site='https://www.hltv.org', dl_location='D:/CSGOPro
     # "Python-urllib/x.y" sent by Python's libraries. Even a plain "Mozilla" or "Opera" is usually enough to bypass that
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent,}
-
+    i = 0
     for demdl in dl_links:
+        i +=1
         try:
             # Download files until 4:30 (don't want to hog internet).
             if datetime.datetime.now().hour >= 16 and datetime.datetime.now().minute > 30:
@@ -111,6 +113,8 @@ def download_dems(dl_links, site='https://www.hltv.org', dl_location='D:/CSGOPro
             print(["Issue during download", filename, url, req])
             # wait 2 minutes before trying again
             time.sleep(120)
+        if i >2:
+            break
 
 
 if __name__ == '__main__':
@@ -121,6 +125,6 @@ if __name__ == '__main__':
 
     download_dems(find_demo_links(get_match_links(99)))
     hltv_unrar()
-    call('C:\\Dropbox\\Dropbox\\HAXz\\PositionAnalyzer\\dem file utilities\\demo parser\\CSPositionAnalyzer.exe D:\\CSGOProGames\\demos D:\\CSGOProGames\\processed')
+    call('C:\\Dropbox\\Dropbox\\HAXz\\PositionAnalyzer\\dem_utilities\\demo_parser\\CSPositionAnalyzer.exe D:\CSGOProGames\demos D:\CSGOProGames\processed')
     for dem in glob.glob('D:\\CSGOProGames\\demos\\*.dem'):
         os.remove(dem)
