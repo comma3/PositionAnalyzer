@@ -4,6 +4,7 @@ import glob
 # Just including these here so I don't have to deal with this again
 # Needs to be above import of unrar
 os.environ['UNRAR_LIB_PATH'] = 'C:/Program Files (x86)/UnrarDLL/UnRAR.dll'
+
 from unrar import rarfile
 
 
