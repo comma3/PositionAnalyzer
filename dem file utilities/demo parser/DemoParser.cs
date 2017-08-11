@@ -62,15 +62,16 @@ namespace CSPositionAnalyzer
                         tickrate = parser.TickRate;
                         halfsecond = Math.Round(0.5 * tickrate);
 
+                        bool error = false;
+
                         // Some files have bad headers. We can attempt to get around that using other values but it's highly likely that these data are also bad.
                         if (Double.IsNaN(tickrate))
                         {
+                            error = true;
                             Console.WriteLine("=============ERROR=============");
                             try // Likely to get div by zero here
                             {
                                 tickrate = parser.Header.PlaybackTicks / parser.Header.PlaybackTime;
-                                Console.WriteLine("=============FIXED=============");
-                                Console.WriteLine(tickrate);
                             }
                             catch (DivideByZeroException)
                             {
@@ -79,6 +80,7 @@ namespace CSPositionAnalyzer
                                 baddemos = baddemos + "," + fileName;
                                 continue;
                             }
+ 
                         }
 
                         // In case it doesn't give a div by zero, we still check for NaN and skip
@@ -87,6 +89,12 @@ namespace CSPositionAnalyzer
                             Console.WriteLine("=============ERROR=============");
                             baddemos = baddemos + "," + fileName;
                             continue;
+                        }
+
+                        if (error)
+                        {
+                            Console.WriteLine("=============FIXED=============");
+                            Console.WriteLine(tickrate);
                         }
 
                         // Got a good tickrate.
@@ -184,13 +192,14 @@ namespace CSPositionAnalyzer
                             parser.MatchStarted += (sender, e) =>
                             {
                                 hasMatchStarted = true;
-                                Console.WriteLine("Parsing match started");
+                                
                                 // Pro games frequently start and restart several times before actually going
                                 // This is just to clean up the console log.
                                 if (!hasMatchPrinted)
                                 {
                                     hasMatchPrinted = true;
                                     //Okay let's output who's really in this game!
+                                    Console.WriteLine("Match parsing started...");
                                     Console.WriteLine("{0}   Participants: {1}  vs  {2} ", matchcode, parser.CTClanName, parser.TClanName);
                                 }
 
@@ -421,8 +430,13 @@ namespace CSPositionAnalyzer
                             catch (System.IO.EndOfStreamException)
                             {
                                 Console.WriteLine(string.Format("Error in {0}. Parser attempted to exceed file length.", fileName));
+                                baddemos = baddemos + "," + fileName;
                             }
-
+                            catch (System.NullReferenceException)
+                            {
+                                Console.WriteLine(string.Format("Error in {0}. Parser attempted to exceed file length.", fileName));
+                                baddemos = baddemos + "," + fileName;
+                            }
 
                             //We want to sort these games by average rank so that we can differentiate strats at different levels
 
@@ -455,10 +469,10 @@ namespace CSPositionAnalyzer
                     Console.WriteLine("=============Next=============");
                 }
 
-                string[] badfiles = baddemos.Split(',');
-                Console.WriteLine(string.Format("There were {0} bad files and {1} successfully processed files", badfiles.Length, files.Length - badfiles.Length));
-
             }
+
+            string[] badfiles = baddemos.Split(',');
+            Console.WriteLine(string.Format("There were {0} bad files and {1} successfully processed files", badfiles.Length, files.Length - badfiles.Length));
         }
 
         private static void Print(string s)
