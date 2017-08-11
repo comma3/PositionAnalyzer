@@ -176,7 +176,7 @@ namespace CSPositionAnalyzer
                                 Console.WriteLine("Match start event not found. Trying to parse assuming match has already started...");
 
                                 // Try to print/record the information that's include in match start parser
-                                Console.WriteLine("{0}   Participants: {1}  vs  {2} ", matchcode, parser.CTClanName, parser.TClanName);
+                                Console.WriteLine("{0} - {1}   Participants: {3}  vs  {4} ", matchcode, map, parser.CTClanName, parser.TClanName);
 
                                 // Sometimes this info gets lost somewhere, so we store it locally.
                                 CTTeamName = parser.CTClanName;
@@ -199,8 +199,8 @@ namespace CSPositionAnalyzer
                                 {
                                     hasMatchPrinted = true;
                                     //Okay let's output who's really in this game!
-                                    Console.WriteLine("Match parsing started...");
-                                    Console.WriteLine("{0}   Participants: {1}  vs  {2} ", matchcode, parser.CTClanName, parser.TClanName);
+                                    Console.WriteLine("Match parsing started normally...");
+                                    Console.WriteLine("{0} - {1}   Participants: {3}  vs  {4} ", matchcode, map, parser.CTClanName, parser.TClanName);
                                 }
 
                                 CTTeamName = parser.CTClanName;
