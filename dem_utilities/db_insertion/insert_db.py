@@ -95,8 +95,8 @@ def GameDataImporter():
                     try:
                         curr.execute("""INSERT INTO Analyzer_MatchInfo 
                                     (external_match_code, rank, team_1, team_2, hltv_link) 
-                                    VALUES ('%s', '%s', '%s', '%s', '%s')"""
-                                     % (matchcode, rank, team1, team2, hltvlink))
+                                    VALUES ('?', '?', '?', '?', '?')""",
+                                     (matchcode, rank, team1, team2, hltvlink))
 
                         matchid = curr.lastrowid
                         conn.commit()
@@ -118,8 +118,8 @@ def GameDataImporter():
                         # gameinfo has to be done this way rather than as an array to get gameid
                         curr.execute("""INSERT INTO Analyzer_GameInfo 
                                     (match_id, played_map, t_score, ct_score, win_reason) 
-                                    VALUES ('%s', '%s', '%s', '%s', '%s')"""
-                                     % (matchid, playedmap, tscore, ctscore, winreason))
+                                    VALUES ('?', '?', '?', '?', '?')""",
+                                    (matchid, playedmap, tscore, ctscore, winreason))
 
                         gameid = curr.lastrowid
                         conn.commit()  # Needs to be run to set gameid (was null without it)
@@ -218,8 +218,8 @@ def GameDataImporter():
 
 
 
-
-    print("Finished! " + str(numoffiles) + " files were added to the database.")
+    conn.close()
+    print("Finished! {} files were added to the database.".format(numoffiles))
 
 
 if __name__ == '__main__':

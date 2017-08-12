@@ -4,8 +4,7 @@ import random
 import time
 import datetime
 import string
-import os
-import glob
+import sqlite3
 
 from bs4 import BeautifulSoup
 
@@ -15,7 +14,6 @@ import MFLibrary as mf
 
 from subprocess import call
 
-
 # used for external key generation
 alphanums = string.ascii_letters + string.digits
 
@@ -24,9 +22,17 @@ def get_match_links(searchdepth=100, site='https://www.hltv.org'):
 
     # Going to just increment the offset in the GET request in python rather than follow the url on the page
     offset = 0
-    # Keep a running list of match links so we don't get duplicates
-    # TODO: Change to sql query after db is populated
-    match_db = mf.csv.read_list('match_db.csv')
+
+    # Collect a set of match links so we don't get duplicates
+    conn = sqlite3.connect('D:\\CSGOProGames\\CSPAdb.sqlite3')
+    curr = conn.cursor()
+    query = curr.execute("""SELECT hltv_link FROM analyzer_MatchInfo""")
+
+    match_db = set()
+    for row in query:
+        match_db.add(row[0])
+
+    conn.close()
 
     match_links = []
 
@@ -53,6 +59,7 @@ def get_match_links(searchdepth=100, site='https://www.hltv.org'):
             # We have reached links that we already collected.
             return match_links
         if 'matches' in link:
+            match_db.add(link)
             match_links.append(link)
 
     # Should only hit this on first run
