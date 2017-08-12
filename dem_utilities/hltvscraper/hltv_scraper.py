@@ -71,14 +71,14 @@ def find_demo_links(match_links, site='https://www.hltv.org', outputpath='D:/CSG
         external_code = ''.join(random.choices(alphanums, k=8))
         # Get the download link from the match page and pair it with the match link for use by users to find exact games
         try:
-            dl_links.append([soup.find_all('a', class_='flexbox left-right-padding')[0].get('href'), link, external_code]) # GOTV demo class
+            dl_links.append([external_code, link, soup.find_all('a', class_='flexbox left-right-padding')[0].get('href')])  # GOTV demo class
         except IndexError:
             # Sometimes matches don't have uploaded DEM files
             print(["Issue finding dem file (probably does not exist)", link, req])
 
     print(dl_links)
     # Include date + hour in case it gets run twice in a day
-    mf.csv.write_list(outputpath + datetime.datetime.now().strftime("_%Y-%m-%d-%H_links_extid.csv"), dl_links)
+    mf.csv.write_list(outputpath + datetime.datetime.now().strftime("!%Y-%m-%d-%H_links_extid.csv"), dl_links)
     return dl_links
 
 
@@ -91,6 +91,7 @@ def download_dems(dl_links, site='https://www.hltv.org', dl_location='D:/CSGOPro
     user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
     headers = {'User-Agent': user_agent,}
     for demdl in dl_links:
+        # TODO: I changed the dl_links order so that it's easier to use later make sure it still works.
         try:
             # Download files until 4:30 (don't want to hog internet).
             if datetime.datetime.now().hour >= 16 and datetime.datetime.now().minute > 30:
@@ -99,7 +100,7 @@ def download_dems(dl_links, site='https://www.hltv.org', dl_location='D:/CSGOPro
                 time.sleep(8*60*60)  # sleep time in seconds (hours * mins * seconds)
                 print('Back to work! ' + datetime.datetime.now().strftime("%c"))
             print('Downloading ' + demdl[1])
-            url = site + demdl[0]
+            url = site + demdl[2]
             req = urllib.request.Request(url, None, headers)
             dl = urllib.request.urlopen(req)
             # DL link is a redirect

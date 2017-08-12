@@ -410,6 +410,7 @@ namespace CSPositionAnalyzer
             }
 
             string[] badfiles = baddemos.Split(',');
+            Console.WriteLine("Bad files: " + baddemos);
             Console.WriteLine(string.Format("There were {0} bad files and {1} successfully processed files", badfiles.Length, files.Length - badfiles.Length));
 
         }
