@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     download_dems(find_demo_links(get_match_links(99)))
     hltv_unrar()
-    # TODO: The console log for demo parser is outputting too often. Try to fix.
+
     call('C:\\Dropbox\\Dropbox\\HAXz\\PositionAnalyzer\\dem_utilities\\demo_parser\\CSPositionAnalyzer.exe D:\CSGOProGames\demos D:\CSGOProGames\processed')
     # If i get more storage, it would probably be useful to keep these files around (or the rar)
     # for dem in glob.glob('D:\\CSGOProGames\\demos\\*.dem'):
