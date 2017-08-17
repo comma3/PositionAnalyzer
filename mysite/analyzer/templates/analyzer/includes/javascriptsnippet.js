@@ -40,7 +40,8 @@
 	    var csrftoken = getCookie('csrftoken');
 	    var xhr = new XMLHttpRequest();
 	    var url = "http://localhost:8080/analyzer/query";
-	    params = "gameobjects=" + document.getElementById("gameobjectsbox").
+	    // Kind of hacky but it works so whatever
+	    params = "gameobjects=" + document.getElementById("gameobjectsbox").value.replace(/\n/g,'_')
         xhr.open("POST", url, true);
 	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -258,7 +259,7 @@
 		newImage.style.top = cursorY + "px";
 		document.body.appendChild(newImage);
 	}
-	
+
 	
 	function clearGameObjects()
 	{

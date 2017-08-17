@@ -12,13 +12,13 @@ from django.http import JsonResponse
 
 def find_games(request):
 
-    objects = request.POST.get('gameobjects', None)
+    objects = request.POST.get('gameobjects', None).split('_')
 
 
     data = {
-        'ctkills': objects,
-        'defuse': 2,
-        'time': 3,
+        'ctkills': objects[0],
+        'defuse': objects[1],
+        'time': objects[2],
         'tkills': 4,
         'bombed': 5,
     }
