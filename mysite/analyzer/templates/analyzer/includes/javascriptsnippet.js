@@ -1,6 +1,24 @@
     {% load staticfiles %}
 	
 	<script type="text/javascript">
+
+	// Stolen from https://stackoverflow.com/questions/42291370/csrf-token-ajax-based-post-in-a-django-project
+    function getCookie(cname)
+    {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
 	
 	function errorTest()
 	{
@@ -16,7 +34,45 @@
 		
 		document.getElementById("sidebartitle").innerHTML = "CSGO Position Analyzer";
 	}
-	
+
+	function runQuery()
+	{
+	    var csrftoken = getCookie('csrftoken');
+	    var xhr = new XMLHttpRequest();
+	    var url = "http://localhost:8080/analyzer/query";
+	    params = "gameobjects=" + document.getElementById("gameobjectsbox").
+        xhr.open("POST", url, true);
+	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+	    xhr.onreadystatechange = function()
+	    {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200)
+                {
+                    data = JSON.parse(xhr.response);
+                    console.log(data)
+                    console.log(data["foo"])
+                    var data = google.visualization.arrayToDataTable([
+                      ['Winner', 'Percent'],
+                      ['CTKills', data["ctkills"]],
+                      ['Defuse', data["defuse"]],
+                      ['Time',  data["time"]],
+                      ['TKills', data["tkills"]],
+                      ['Target Bombed', data["bombed"]],
+                    ]);
+
+                    drawChart(data);
+
+                } else {
+                    alert("Server error!")
+                }
+            }
+        }
+
+        xhr.send(params);
+
+	}
+
 	<!-- Pie Chart Code -->	
 	google.charts.load('current', {'packages':['corechart']});
 	<!-- google.charts.setOnLoadCallback(drawChart); -->
@@ -70,7 +126,7 @@
 		}
 	}
 	
-	function setObjectPosition(positionID, selectedObject)
+	function setObjectPosition(x, y, selectedObject)
 	{
 		if (selectedObject != null)
 		{
@@ -138,26 +194,22 @@
 			}
 				
 			OBJECT = null;
-			GAMEOBJECTS.push(selectedObject + ' - ' + positionID);
+			GAMEOBJECTS.push(selectedObject + ' - ' + x + ',' + y);
 			gameobjectsbox.value=GAMEOBJECTS.join("\n");
 		}
 	}
-	
-	//TODO: Fix this!
+
 	function insertIcon(selectedIcon) 
 	{
-		// myImage : ID of image on which to place new image
-		var image = document.getElementById("maplistener");
-		
 		// The django server replaces all of the templating so we need to hard code the switch in JavaScript
 		var newImage = document.createElement("img");
 		newImage.setAttribute('id', 'icon');
-		//default settings, can be overridden in switch statement
+		// Default settings, can be overridden in switch statement
 		// Currently defaults to player icon size because there are many more weapons
 		newImage.setAttribute('height', '15px');
 		newImage.setAttribute('width', '15px');
 		newImage.setAttribute('class', 'icon');
-		console.log(selectedIcon);
+
 		switch (selectedIcon)
 		{
 			case "Smoke" :
@@ -238,24 +290,10 @@
 	{
 		clearGameObjects();
 		OBJECT = "null";			
-		drawResults();
+		drawChart();
 	}
-	
-	
-	function drawResults()
-	{
-		var data = google.visualization.arrayToDataTable([
-          ['Winner', 'Percent'],
-          ['CTKills', {{CTKill}}],
-          ['Defuse', {{Defuse}}],
-          ['Time',  {{Time}}],
-          ['TKills', {{TKill}}],
-          ['Target Bombed', {{TargetBombed}}],
-        ]);
-		
-		drawChart(data);
-	}
-	
+
+
 	var OBJECT = null;
 	var GAMEOBJECTS = [];
 	var SMOKECOUNT = 0;
@@ -267,7 +305,8 @@
 	var cursorX;
 	var cursorY;
 
-	function checkCursor() {
+	function checkCursor()
+	{
 		document.onmousemove = function(e){
 			cursorX = e.pageX;
 			cursorY = e.pageY;
@@ -275,7 +314,21 @@
 	}
 
 	setInterval("checkCursor()", 100);
-	
+
+	function get_position()
+	{
+		pos_x = event.offsetX?(event.offsetX):event.pageX-document.getElementById("minimap").offsetRight;
+        pos_y = event.offsetY?(event.offsetY):event.pageY-document.getElementById("minimap").offsetTop;
+        if (OBJECT == "null")
+        {
+            alert("No object selected!")
+        }
+        else
+        {
+            setObjectPosition(pos_x, pos_y, OBJECT);
+        }
+	}
+
 	
 
 </script>

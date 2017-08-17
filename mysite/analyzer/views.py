@@ -1,12 +1,30 @@
 import operator
 from functools import reduce
 
-from analyzer.models import PlayerData, Nades
+#from mysite.analyzer.models import *
+
 from django.db.models import Q, F
 from django.shortcuts import render
 
-precision = {"exact": 0, "tight": 1, "loose" : 2}
 
+from django.http import JsonResponse
+
+
+def find_games(request):
+
+    objects = request.POST.get('gameobjects', None)
+
+
+    data = {
+        'ctkills': objects,
+        'defuse': 2,
+        'time': 3,
+        'tkills': 4,
+        'bombed': 5,
+    }
+
+
+    return JsonResponse(data)
 
 def dbquery(request):
 

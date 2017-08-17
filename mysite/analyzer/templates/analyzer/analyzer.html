@@ -15,12 +15,11 @@
 <div class="row">
 <!-- Map Image -->
 	<div class="col-md-4">
-		<img src="{% static 'img/inferno_newcrop.png' %}" width="456" height="451">
+		<img src="{% static 'img/inferno_newcrop.png' %}" id="minimap" width="456" height="451" onclick="get_position()">
 	</div>
 
 
 <!-- Beginning of query form -->
-	<form name='CSPAForm' action="" method="post">
 
 	{% csrf_token %}
 
@@ -31,13 +30,13 @@
 
 		<b>Nade/Bomb:</b>
 		<div class="btn-group">
-			<button type="button" onclick="setActive('Smoke')" class="btn btn-primary btn-sm">Add Smoke</button>
-			<button type="button" onclick="setActive('Flash')" class="btn btn-primary btn-sm">Add Flash</button>
-			<button type="button" onclick="setActive('Molly')" class="btn btn-primary btn-sm">Add Molly</button>
-			<button type="button" onclick="setActive('HE')" class="btn btn-primary btn-sm">Add HE</button>
-			<button type="button" onclick="setActive('Decoy')" class="btn btn-primary btn-sm">Add Decoy</button>
-			<button type="button" onclick="setActive('BombDown')" class="btn btn-primary btn-sm">Add Bomb Down</button>
-			<button type="button" onclick="setActive('BombPlanted')" class="btn btn-primary btn-sm">Add Bomb Planted</button>
+			<button type="button" onclick="setActive('Smoke')" class="btn btn-primary btn-sm">Smoke</button>
+			<button type="button" onclick="setActive('Flash')" class="btn btn-primary btn-sm">Flash</button>
+			<button type="button" onclick="setActive('Molly')" class="btn btn-primary btn-sm">Molly</button>
+			<button type="button" onclick="setActive('HE')" class="btn btn-primary btn-sm">HE</button>
+			<button type="button" onclick="setActive('Decoy')" class="btn btn-primary btn-sm">Decoy</button>
+			<button type="button" onclick="setActive('BombDown')" class="btn btn-primary btn-sm">Bomb Down</button>
+			<button type="button" onclick="setActive('BombPlanted')" class="btn btn-primary btn-sm">Bomb Planted</button>
 		</div>
 
 		<br>
@@ -47,10 +46,10 @@
 			{% include "analyzer/includes/weaponsnippet.html" %}
 		</select>
 		<div class="btn-group">
-			<button type="button" onclick="setActive('T')" class="btn btn-primary btn-sm">Add T</button>
-			<button type="button" onclick="setDead('T')" class="btn btn-primary btn-sm">Add Dead T</button>
-			<button type="button" onclick="setActive('CT')" class="btn btn-primary btn-sm">Add CT</button>
-			<button type="button" onclick="setDead('CT')" class="btn btn-primary btn-sm">Add Dead CT</button>
+			<button type="button" onclick="setActive('T')" class="btn btn-primary btn-sm">T</button>
+			<button type="button" onclick="setDead('T')" class="btn btn-primary btn-sm">Dead T</button>
+			<button type="button" onclick="setActive('CT')" class="btn btn-primary btn-sm">CT</button>
+			<button type="button" onclick="setDead('CT')" class="btn btn-primary btn-sm">Dead CT</button>
 			<button type="button" onclick="clearGameObjects()" class="btn btn-danger btn-sm">Clear Board</button>
 		</div>
 
@@ -92,9 +91,7 @@
 
 
 	<div>
-		<input type="submit" value="Submit" class="btn btn-success btn-lg" onclick="startQuery()">
-		<button type="button" class="btn btn-danger btn-lg" onclick="resetAll()">Reset All</button>
-		<button type="button" class="btn btn-info btn-lg" onclick="resetAllIcons()">Remove Icons</button>
+		<button return="false" class="btn btn-success btn-lg" onclick="runQuery()">Query</button>
 	</div>
 <!-- End of query form -->
 	</form>
