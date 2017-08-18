@@ -19,21 +19,6 @@
         }
         return "";
     }
-	
-	function errorTest()
-	{
-		if ({{BadSearch}}) {
-			resetAll();
-		} else if ({{Error}}) {
-			alert("Something went wrong!");
-			resetAll();
-		} else if ({{NoGames}}) {
-			alert("No games matched your search. Consider removing some limited factors.");
-			resetAll();			
-		}
-		
-		document.getElementById("sidebartitle").innerHTML = "CSGO Position Analyzer";
-	}
 
 	function runQuery()
 	{
@@ -117,12 +102,12 @@
 		} else if (player == "T") {
 			TCOUNT += 1
 			OBJECT = "null";
-			GAMEOBJECTS.push(player + " - Dead - Still dead");
+			GAMEOBJECTS.push(player + " - Dead");
 			gameobjectsbox.value=GAMEOBJECTS.join("\n");
 		} else if (player == "CT") {
 			CTCOUNT += 1
 			OBJECT = "null";
-			GAMEOBJECTS.push(player + " - Dead - Still dead");
+			GAMEOBJECTS.push(player + " - Dead");
 			gameobjectsbox.value=GAMEOBJECTS.join("\n");
 		}
 	}
@@ -294,18 +279,8 @@
 		drawChart();
 	}
 
-
-	var OBJECT = null;
-	var GAMEOBJECTS = [];
-	var SMOKECOUNT = 0;
-	var FLASHCOUNT = 0;
-	var HECOUNT = 0;
-	var MOLLYCOUNT = 0;
-	var DECOYCOUNT = 0;
-	var BOMBCOUNT = 0;
-	var cursorX;
+    var cursorX;
 	var cursorY;
-
 	function checkCursor()
 	{
 		document.onmousemove = function(e){
@@ -330,6 +305,17 @@
         }
 	}
 
-	
+	var OBJECT = null;
+	var GAMEOBJECTS = [];
+	var SMOKECOUNT = 0;
+	var FLASHCOUNT = 0;
+	var HECOUNT = 0;
+	var MOLLYCOUNT = 0;
+	var DECOYCOUNT = 0;
+	var BOMBCOUNT = 0;
+	var	TCOUNT = 0;
+	var	CTCOUNT = 0;
+
+	document.getElementById("sidebartitle").innerHTML = "CSGO Position Analyzer";
 
 </script>

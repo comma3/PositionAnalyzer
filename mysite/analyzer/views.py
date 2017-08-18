@@ -1,24 +1,40 @@
 import operator
 from functools import reduce
 
-#from mysite.analyzer.models import *
-
 from django.db.models import Q, F
 from django.shortcuts import render
-
-
 from django.http import JsonResponse
 
+import pandas as pd
+import sqlite3
 
 def find_games(request):
 
-    objects = request.POST.get('gameobjects', None).split('_')
+    response = request.POST.get('gameobjects', None).split('_')
 
+    # Organize and clear the input
+    pieces =[]
+    for element in response:
+        piece = element.split('-')
+        coords = piece.pop().split(',')
+        piece.extend(coords)
+        pieces.append([x.strip() for x in piece])
+
+    conn = sqlite3.connect('C:\Dropbox\Dropbox\HAXz\CBBTO\data\cbb.db')
+    players = pd.read_sql_query("""SELECT * FROM PlayerData""", conn)
+    games = pd.read_sql_query("""SELECT * FROM GameInfo""", conn)
+    nades = pd.read_sql_query("""SELECT * FROM GameInfo""", conn)
+    conn.close()
+
+    for i,game in games.iterrows():
+        working = players.loc[players["game"] == game[i]]
+
+    pd.groupby()
 
     data = {
-        'ctkills': objects[0],
-        'defuse': objects[1],
-        'time': objects[2],
+        'ctkills': pieces,
+        'defuse': 2,
+        'time': 3,
         'tkills': 4,
         'bombed': 5,
     }
