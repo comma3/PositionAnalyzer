@@ -26,7 +26,7 @@
 	    var xhr = new XMLHttpRequest();
 	    var url = "http://localhost:8080/analyzer/query";
 	    // Kind of hacky but it works so whatever
-	    params = "gameobjects=" + document.getElementById("gameobjectsbox").value.replace(/\n/g,'_')
+	    params = "gameobjects=" + document.getElementById("gameobjectsbox").value.replace(/\n/g,'_') + "&map=" + document.getElementById("map").value;
         xhr.open("POST", url, true);
 	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
