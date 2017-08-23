@@ -22,42 +22,98 @@
 
 	function runQuery()
 	{
+	    document.getElementById("query").disabled = true;
 	    var csrftoken = getCookie('csrftoken');
 	    var xhr = new XMLHttpRequest();
 	    var url = "http://localhost:8080/analyzer/query";
-	    // Kind of hacky but it works so whatever
-	    params = "gameobjects=" + document.getElementById("gameobjectsbox").value.replace(/\n/g,'_') + "&map=" + document.getElementById("map").value;
+
+	    if (document.getElementById("gameobjectsbox").value == ''){
+	        alert("You have to have some game objects!!")
+	        document.getElementById("query").disabled = false;
+	        return
+	    }
+        objects = "gameobjects=" + document.getElementById("gameobjectsbox").value.replace(/\n/g,'_')
+        map = "&map=" + document.getElementById("map").value;
+        threshold = "&threshold=" + document.getElementById("threshold").value;
+        distance = "&distance=" + document.getElementById("distance").value;
+	    params = objects + map + threshold + distance
         xhr.open("POST", url, true);
 	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+	    console.log(params)
 	    xhr.onreadystatechange = function()
 	    {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200)
                 {
-                    data = JSON.parse(xhr.response);
-                    console.log(data)
-                    console.log(data["foo"])
-                    var data = google.visualization.arrayToDataTable([
+                    data = JSON.parse(xhr.response)['results'];
+                    other = JSON.parse(xhr.response)
+                    console.log(data);
+                    console.log(other);
+
+                    var tkills = 0;
+                    var ctkills = 0;
+                    var defuse = 0;
+                    var bombed = 0;
+                    var time = 0;
+
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i][1] == 'TerroristWin'){
+                                tkills += 1;
+                        } else if (data[i][1] == 'CTWin') {
+                                ctkills += 1;
+                        } else if (data[i][1] == 'BombDefused') {
+                                defuse += 1;
+                        } else if (data[i][1] == 'TargetBombed') {
+                                bombed += 1;
+                        } else if (data[i][1] == 'TargetSaved') {
+                                time += 1;
+                        }
+                    };
+
+                    // Not counting draws - need to figure out where they come from
+
+                    var graphData = google.visualization.arrayToDataTable([
                       ['Winner', 'Percent'],
-                      ['CTKills', data["ctkills"]],
-                      ['Defuse', data["defuse"]],
-                      ['Time',  data["time"]],
-                      ['TKills', data["tkills"]],
-                      ['Target Bombed', data["bombed"]],
+                      ['CTKills', ctkills],
+                      ['Defuse', defuse],
+                      ['Time',  time],
+                      ['TKills', tkills],
+                      ['Target Bombed', bombed],
                     ]);
 
-                    drawChart(data);
+                    drawChart(graphData);
+
+                    data.sort().reverse();
+
+                    var tableData = "<tr><th>Similarity</th><th>Win Reason</th><th>Score (T, CT)</th><th>Match Link </th></tr>";
+                    var round;
+                    var similarity ;
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i][1] != "Draw")
+                        {
+                            similarity = data[i][0]*100
+                            tableData = tableData + '<tr><td>' + similarity.toFixed(3) + "</td><td>";
+                            tableData = tableData + data[i][1] + "</td><td>";
+                            tableData = tableData + data[i][3] + ", " + data[i][4] + "</td><td>";
+                            round = parseInt(data[i][3]) + parseInt(data[i][4]) + 1;
+                            tableData = tableData + "<a href=https://www.hltv.org" + data[i][2] + " target='_blank'> Round " + round + "</a></td></tr>";
+                        }
+                    }
+                    document.getElementById("gamedata").innerHTML = tableData;
 
                 } else {
                     alert("Server error!")
                 }
+                document.getElementById("query").disabled = false;
             }
         }
 
         xhr.send(params);
 
 	}
+
+
 
 	<!-- Pie Chart Code -->	
 	google.charts.load('current', {'packages':['corechart']});

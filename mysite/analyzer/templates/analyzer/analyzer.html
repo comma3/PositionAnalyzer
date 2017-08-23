@@ -3,11 +3,6 @@
 {% load staticfiles %}
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-	
-	<script type="text/javascript" src="{% static 'js/jquery.maphilight.js' %}"></script>
-    <script type="text/javascript">$(function() {$('.map').maphilight({"strokeColor":"0080FF","strokeWidth":1,"fillColor":"0080FF","fillOpacity":0.3});
-	});</script>
-
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 {% include "analyzer/includes/javascriptsnippet.js" %}
@@ -18,15 +13,12 @@
 		<img src="{% static 'img/inferno_newcrop.png' %}" id="minimap" width="456" height="451" onclick="get_position()">
 	</div>
 
-
-<!-- Beginning of query form -->
-
 	{% csrf_token %}
-
 <!-- Nade/bomb/player info -->
 	<div class="col-md-4">
 		<b>Game Objects:</b><br>
-		<textarea name="gameobjectsbox" id="gameobjectsbox" cols="59" rows="5" readonly="true" onclick="$('#gameobjectsbox').getSelection()"></textarea>
+		<textarea name="gameobjectsbox" id="gameobjectsbox" cols="59" rows="5" readonly="true"></textarea>
+		<!--//onclick="$('#gameobjectsbox').getSelection()-->
 
 		<b>Nade/Bomb:</b>
 		<div class="btn-group">
@@ -52,6 +44,9 @@
 			<button type="button" onclick="setDead('CT')" class="btn btn-primary btn-sm">Dead CT</button>
 			<button type="button" onclick="clearGameObjects()" class="btn btn-danger btn-sm">Clear Board</button>
 		</div>
+		<div>
+			<button return="false" id="query" class="btn btn-success btn-lg" onclick="runQuery()">Query</button>
+		</div>
 
 <!--End of middle column-->
 	</div>
@@ -76,25 +71,22 @@
 			<option value="s45">Silver4/5</option>
 			<option value="s123">ChuBot's Level</option>
 		</select>
-	</div>
-	<div>
 		<b>Map:</b>
 		<select id="map" class="form-control input-sm">
 			<option value="inferno">Inferno</option>
 		</select>
+		<b>Similarity threshold:</b>
+			<input id="threshold" type="text" value="0.81" class="form-control input-sm">
+		<b>Distance tolerance:</b>
+			<input id="distance" type="text" value="400" class="form-control input-sm">
 	</div>
 
 	<h4>Instructions:</h4>
-	<p>Use the selection menus labeled "Nade/Bomb" and "Weapon" to choose the nade or weapon of the relevant player.</p>
-	<p>Click "Add Selected" or "Add T/CT", then click the location of the player or nade on the map.</p>
-	<p>Unspecified players will always default to any status in the search. Nades and bombs will also always be variable in the results.</p>
+	<p>Use the buttons to select a player or grenade.</p>
+	<p>Then, click the location of the player or nade on the map.</p>
+	<p>Unspecified players will default to any status in the search. Nades and bombs will also always be variable in the results.</p>
 
 
-	<div>
-		<button return="false" class="btn btn-success btn-lg" onclick="runQuery()">Query</button>
-	</div>
-<!-- End of query form -->
-	</form>
 	<!--End of control column-->
 	</div>
 
@@ -102,9 +94,21 @@
 </div> <!--End of row div-->
 
 <!-- Pie chart results -->
-	<div class="col-md-3">
-		<h3>Results:</h3>
-		<div id="piechart" style="width: 400px; height: 300px;"></div>
-	</div>
+<div class="col-md-3">
+	<h3>Results:</h3>
+	<div id="piechart" style="width: 400px; height: 300px;"></div>
+</div>
+
+<!-- Table showing games-->
+<div class="col-md-4">
+	<table id="gamedata" style="width:100%">
+		<tr>
+			<th>Similarity</th>
+			<th>Win Reason</th>
+			<th>Score (T, CT)</th>
+			<th>Match Link (Round Number)</th>
+		</tr>
+	</table>
+</div>
 
 {% endblock %}	
