@@ -23,7 +23,8 @@
 
 	function runQuery()
 	{
-	    document.getElementById("query").disabled = true;
+	    var goodInput = true;
+
 	    var csrftoken = getCookie('csrftoken');
 	    var xhr = new XMLHttpRequest();
 	    //var url = "http://www.chu-bot.com/analyzer/query";
@@ -37,6 +38,12 @@
         objects = "gameobjects=" + document.getElementById("gameobjectsbox").value.replace(/\n/g,'_')
         map = "&map=" + document.getElementById("map").value;
         threshold = "&threshold=" + document.getElementById("threshold").value;
+        if (threshold > 1)
+        {
+            alert("Threshold must be between 0 and 1. That is, it should be a decimal like 0.81");
+            goodInput = false;
+        }
+
         distance = "&distance=" + document.getElementById("distance").value;
 		
 		smokemin = "&smokemin=" + document.getElementById("smokemin").value;
@@ -53,81 +60,85 @@
 	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
 	    console.log(params)
-	    xhr.onreadystatechange = function()
+	    if (goodInput)
 	    {
-            if (xhr.readyState == 4)
+	        document.getElementById("query").disabled = true;
+            xhr.onreadystatechange = function()
             {
-                if (xhr.status == 200)
+                if (xhr.readyState == 4)
                 {
-                    data = JSON.parse(xhr.response)['results'];
-                    other = JSON.parse(xhr.response)
-                    console.log(data);
-                    console.log(other);
-
-                    var tkills = 0;
-                    var ctkills = 0;
-                    var defuse = 0;
-                    var bombed = 0;
-                    var time = 0;
-
-                    if (data.length < 1)
+                    if (xhr.status == 200)
                     {
-                        alert("No games found!");
-                    }
+                        data = JSON.parse(xhr.response)['results'];
+                        other = JSON.parse(xhr.response)
+                        console.log(data);
+                        console.log(other);
 
-                    for (i = 0; i < data.length; i++)
-                    {
-                        if (data[i][1] == 'TerroristWin'){
-                                tkills += 1;
-                        } else if (data[i][1] == 'CTWin') {
-                                ctkills += 1;
-                        } else if (data[i][1] == 'BombDefused') {
-                                defuse += 1;
-                        } else if (data[i][1] == 'TargetBombed') {
-                                bombed += 1;
-                        } else if (data[i][1] == 'TargetSaved') {
-                                time += 1;
-                        }
-                    };
+                        var tkills = 0;
+                        var ctkills = 0;
+                        var defuse = 0;
+                        var bombed = 0;
+                        var time = 0;
 
-                    // Not counting draws - need to figure out where they come from
-
-                    var graphData = google.visualization.arrayToDataTable([
-                      ['Winner', 'Percent'],
-                      ['CTKills', ctkills],
-                      ['Defuse', defuse],
-                      ['Time',  time],
-                      ['TKills', tkills],
-                      ['Target Bombed', bombed],
-                    ]);
-                    drawChart(graphData);
-
-                    data.sort().reverse();
-                    var tableData = "<tr><th>Similarity</th><th>Win Reason</th><th>Score (T, CT)</th><th>Match Link </th></tr>";
-                    var round;
-                    var similarity ;
-                    for (i = 0; i < data.length; i++)
-                    {
-                        if (data[i][1] != "Draw")
+                        if (data.length < 1)
                         {
-                            similarity = data[i][0]*100
-                            tableData = tableData + '<tr><td>' + similarity.toFixed(1) + "</td><td>";
-                            tableData = tableData + data[i][1] + "</td><td>";
-                            tableData = tableData + data[i][3] + ", " + data[i][4] + "</td><td>";
-                            round = parseInt(data[i][3]) + parseInt(data[i][4]) + 1;
-                            tableData = tableData + "<a href=https://www.hltv.org" + data[i][2] + " target='_blank'> Round " + round + "</a></td></tr>";
+                            alert("No games found!");
                         }
-                    }
-                    document.getElementById("gamedata").innerHTML = tableData;
 
-                } else {
-                    alert("Server error!")
+                        for (i = 0; i < data.length; i++)
+                        {
+                            if (data[i][1] == 'TerroristWin'){
+                                    tkills += 1;
+                            } else if (data[i][1] == 'CTWin') {
+                                    ctkills += 1;
+                            } else if (data[i][1] == 'BombDefused') {
+                                    defuse += 1;
+                            } else if (data[i][1] == 'TargetBombed') {
+                                    bombed += 1;
+                            } else if (data[i][1] == 'TargetSaved') {
+                                    time += 1;
+                            }
+                        };
+
+                        // Not counting draws - need to figure out where they come from
+
+                        var graphData = google.visualization.arrayToDataTable([
+                          ['Winner', 'Percent'],
+                          ['CTKills', ctkills],
+                          ['Defuse', defuse],
+                          ['Time',  time],
+                          ['TKills', tkills],
+                          ['Target Bombed', bombed],
+                        ]);
+                        drawChart(graphData);
+
+                        data.sort().reverse();
+                        var tableData = "<tr><th>Similarity</th><th>Win Reason</th><th>Score (T, CT)</th><th>Match Link </th></tr>";
+                        var round;
+                        var similarity ;
+                        for (i = 0; i < data.length; i++)
+                        {
+                            if (data[i][1] != "Draw")
+                            {
+                                similarity = data[i][0]
+                                tableData = tableData + '<tr><td>' + similarity.toFixed(3) + "</td><td>";
+                                tableData = tableData + data[i][1] + "</td><td>";
+                                tableData = tableData + data[i][3] + ", " + data[i][4] + "</td><td>";
+                                round = parseInt(data[i][3]) + parseInt(data[i][4]) + 1;
+                                tableData = tableData + "<a href=https://www.hltv.org" + data[i][2] + " target='_blank'> Round " + round + "</a></td></tr>";
+                            }
+                        }
+                        document.getElementById("gamedata").innerHTML = tableData;
+
+                    } else {
+                        alert("Server error!")
+                    }
+                    document.getElementById("query").disabled = false;
                 }
-                document.getElementById("query").disabled = false;
             }
+            xhr.send(params);
         }
-        xhr.send(params);
-	}
+    }
 
 	<!-- Pie Chart Code -->	
 	google.charts.load('current', {'packages':['corechart']});
@@ -242,8 +253,7 @@
 				
 				case "T" :
 				    if (TCOUNT > 10){alert("More than 5 Terrorists?");}
-					//selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
-                    selectedObject = selectedObject + ' - Any'
+					selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
                     cursorX = cursorX - 8
 					cursorY = cursorY - 8
 					insertIcon(selectedObject);
@@ -251,8 +261,7 @@
 					
 				case "CT" :
 				    if (CTCOUNT > 10){alert("More than 5 CounterTerrorists?");}
-					//selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
-					selectedObject = selectedObject + ' - Any'
+					selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
 					cursorX = cursorX - 8
 					cursorY = cursorY - 8
 					insertIcon(selectedObject);
