@@ -5,7 +5,6 @@ from django.shortcuts import render
 
 def show_about(request):
     return render(request, 'about/about.html')
-
    
 def show_contact(request):
     return render(request, 'contact/contact.html')
