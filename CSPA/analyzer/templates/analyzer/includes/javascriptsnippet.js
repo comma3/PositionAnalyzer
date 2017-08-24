@@ -25,7 +25,8 @@
 	    document.getElementById("query").disabled = true;
 	    var csrftoken = getCookie('csrftoken');
 	    var xhr = new XMLHttpRequest();
-	    var url = "http://www.chu-bot.com/analyzer/query";
+	    //var url = "http://www.chu-bot.com/analyzer/query";
+	    var url = "http://localhost:8080/analyzer/query";
 
 	    if (document.getElementById("gameobjectsbox").value == ''){
 	        alert("You have to have some game objects!!")

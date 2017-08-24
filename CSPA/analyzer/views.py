@@ -20,9 +20,16 @@ def find_games(request):
     request_map = request.POST.get('map', None)
     threshold = float(request.POST.get('threshold', None))
     distance_scale = float(request.POST.get('distance', None))
-    # This time flexibility might need refinement. For example, different times might be desired for smokes and flashes
-    # Due to the differences in how long they last
-    nade_range = 2
+    # We want to ability to project nades for different periods of time
+    smoke_min = float(request.POST.get('smokemin', None))
+    smoke_max = float(request.POST.get('smokemax', None))
+    molly_min = float(request.POST.get('mollymin', None))
+    molly_max = float(request.POST.get('mollymax', None))
+    flash_min = float(request.POST.get('flashmin', None))
+    flash_max = float(request.POST.get('flashmax', None))
+    he_min = float(request.POST.get('hemin', None))
+    he_max = float(request.POST.get('hemax', None))
+
 
     report = []
     # Organize and cleaning the input
@@ -53,7 +60,8 @@ def find_games(request):
         y_invert = -1
         x_invert = 1
 
-    conn = sqlite3.connect('/home/CSPA/CSPAdb.sqlite3')
+    conn = sqlite3.connect('/vagrant/data/CSPAdb.sqlite3')
+    #conn = sqlite3.connect('/home/PositionAnalyzer/CSPA/CSPAdb.sqlite3')
     match_links = pd.read_sql_query("""SELECT id,hltv_link FROM analyzer_MatchInfo""", conn)
 
     player_data = pd.read_sql_query("""SELECT time, team, XPos, YPos, weapon, game_id, t_score, ct_score, win_reason, match_id
@@ -209,44 +217,96 @@ def find_games(request):
 
         if nades:
             similarities = []
+            nade_rows = pd.DataFrame()
             nade_similarity = 0
 
-            # Get all the nades from the same game within a defined time range of the current tick.
-            nade_rows = nade_data.loc[
-                (nade_data.time < time + nade_range) & (nade_data.time > time - nade_range) & (
-                    nade_data.game_id == game_id)]
+            wanted_smoke = 0
+            wanted_molly = 0
+            wanted_flash = 0
+            wanted_he = 0
+
+            found = []
+
+            # First we need to collect all of the relevant nade data
+            # We need to search over different time horizons for different nades
+            for nade in nades:
+
+                if nade[0] == 'Smoke':
+                    nade_min = smoke_min
+                    nade_max = smoke_max
+                    wanted_smoke += 1
+                elif nade[0] == 'Molly':
+                    nade_min = molly_min
+                    nade_max = molly_max
+                    wanted_molly += 1
+                elif nade[0] == 'Flash':
+                    nade_min = flash_min
+                    nade_max = flash_max
+                    wanted_flash += 1
+                elif nade[0] == 'HE':
+                    nade_min = he_min
+                    nade_max = he_max
+                    wanted_he += 1
+                else:
+                    nade_min = 2
+                    nade_max = 2
+
+                # Don't need to search the dataframe again during the same tick
+                # So we skip ahead if multiple of the same type of nade are requested
+                if nade[0] in found:
+                    continue
+                else:
+                    found.append(nade[0])
+
+                # Then, we append all of the matching grenades to the dataset
+                nade_rows = nade_rows.append(nade_data.loc[(nade_data.game_id == game_id) &
+                                                           (nade_data.time < time + nade_max) &
+                                                            (nade_data.time > time + nade_min) &
+                                                           (nade_data.nade_type == nade[0])])
+
+
+            # # Get all the nades from the same game within a defined time range of the current tick.
+            # nade_rows = nade_data.loc[
+            #     (nade_data.time < time + nade_range) & (nade_data.time > time - nade_range) & (
+            #         nade_data.game_id == game_id)]
 
             # If the number of requested nades is greater than the number of counted nades
             # we skip ahead to increase speed. We might miss some cases where there are many
             # players and the missing objects wouldn't drop the score below the threshold
             # but for now I think we can skip these edge cases in favor of speed.
-            if len(nade_rows.index) >= len(nades):
+            if len(nade_rows.index) >= len(nades) or wanted_smoke <= len(
+                    nade_rows[(nade_rows['nade_type'] == 'Smoke')]) or wanted_molly <= len(
+                    nade_rows[(nade_rows['nade_type'] == 'Molly')]) or wanted_flash <= len(
+                    nade_rows[(nade_rows['nade_type'] == 'Flash')]) or wanted_he <= len(
+                    nade_rows[(nade_rows['nade_type'] == 'HE')]):
                 for i, nade_row in nade_rows.iterrows():
                     tempscore = []
                     for nade in nades:
-                        score = 0.0
                         if nade_row['nade_type'] == nade[0]:
                             # Customized for each map
                             distance = sqrt((((x_invert * (nade_row['XPos'] + x_offset)) - (nade[1] * 9.75)) ** 2 +
-                                              (y_invert * (nade_row['YPos'] + y_offset)) - (nade[2] * 9.75)) ** 2)
-                            score += 2 ** (-distance / distance_scale)  # Approaches 1 as distance decreases
+                                             (y_invert * (nade_row['YPos'] + y_offset)) - (nade[2] * 9.75)) ** 2)
+                            score = 2 ** (-distance / distance_scale)  # Approaches 1 as distance decreases
                             tempscore.append(score)
                         else:
                             tempscore.append(0)
-
                     similarities.append(tempscore)
+            else:
+                continue
 
-                # Convert profit function into cost function
-                for i, row in enumerate(similarities):
-                    for j, column in enumerate(row):
-                        similarities[i][j] = 1 - similarities[i][j]
 
-                if similarities:
-                    m = munkres.Munkres()
-                    indices = m.compute(similarities)
-                    for row, column in indices:
-                        # Revert to a similarity (high is better) and calculate total
-                        nade_similarity += 1 - similarities[row][column]
+
+            # Convert profit function into cost function
+            for i, row in enumerate(similarities):
+                for j, column in enumerate(row):
+                    similarities[i][j] = 1 - similarities[i][j]
+
+            if similarities:
+                m = munkres.Munkres()
+                indices = m.compute(similarities)
+                for row, column in indices:
+                    # Revert to a similarity (high is better) and calculate total
+                    nade_similarity += 1 - similarities[row][column]
 
         # Weighted normalization of the two scores
         total_similarity = (player_similarity + nade_similarity) / ((2 * len(players)) + len(nades))

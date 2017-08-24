@@ -25,7 +25,7 @@ SECRET_KEY = 'zrfj6%m_-+c+af3jis7d1%+1u@&p)d*@zk#(%*zljrq5-@!ws$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['165.227.88.51', 'chu-bot.com', '.chu-bot.com' ]
+ALLOWED_HOSTS = ['165.227.88.51', 'chu-bot.com', '.chu-bot.com', 'localhost' ]
 
 
 # Application definition
@@ -78,7 +78,8 @@ WSGI_APPLICATION = 'CSPA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'CSPAdb.sqlite3'),
+        #'NAME': os.path.join(BASE_DIR, 'CSPAdb.sqlite3'),
+		'NAME': os.path.join('/vagrant/data', 'CSPAdb.sqlite3'),
     }
 }
 
