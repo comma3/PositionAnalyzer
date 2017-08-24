@@ -20,6 +20,7 @@
         return "";
     }
 
+
 	function runQuery()
 	{
 	    document.getElementById("query").disabled = true;
@@ -54,7 +55,8 @@
 	    console.log(params)
 	    xhr.onreadystatechange = function()
 	    {
-            if (xhr.readyState == 4) {
+            if (xhr.readyState == 4)
+            {
                 if (xhr.status == 200)
                 {
                     data = JSON.parse(xhr.response)['results'];
@@ -68,7 +70,13 @@
                     var bombed = 0;
                     var time = 0;
 
-                    for (i = 0; i < data.length; i++) {
+                    if (data.length < 1)
+                    {
+                        alert("No games found!");
+                    }
+
+                    for (i = 0; i < data.length; i++)
+                    {
                         if (data[i][1] == 'TerroristWin'){
                                 tkills += 1;
                         } else if (data[i][1] == 'CTWin') {
@@ -92,19 +100,18 @@
                       ['TKills', tkills],
                       ['Target Bombed', bombed],
                     ]);
-
                     drawChart(graphData);
 
                     data.sort().reverse();
-
                     var tableData = "<tr><th>Similarity</th><th>Win Reason</th><th>Score (T, CT)</th><th>Match Link </th></tr>";
                     var round;
                     var similarity ;
-                    for (i = 0; i < data.length; i++) {
+                    for (i = 0; i < data.length; i++)
+                    {
                         if (data[i][1] != "Draw")
                         {
                             similarity = data[i][0]*100
-                            tableData = tableData + '<tr><td>' + similarity.toFixed(3) + "</td><td>";
+                            tableData = tableData + '<tr><td>' + similarity.toFixed(1) + "</td><td>";
                             tableData = tableData + data[i][1] + "</td><td>";
                             tableData = tableData + data[i][3] + ", " + data[i][4] + "</td><td>";
                             round = parseInt(data[i][3]) + parseInt(data[i][4]) + 1;
@@ -119,17 +126,14 @@
                 document.getElementById("query").disabled = false;
             }
         }
-
         xhr.send(params);
-
 	}
-
-
 
 	<!-- Pie Chart Code -->	
 	google.charts.load('current', {'packages':['corechart']});
 	<!-- google.charts.setOnLoadCallback(drawChart); -->
-		
+
+
 	function drawChart(data) 
 	{
 		var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -158,11 +162,13 @@
 			OBJECT = newObject;
 		}
 	}
-	
+
+
 	//Special case of set active
 	function setDead(player)
 	{
-		if (player == "T" && TCOUNT >= 5) {
+		if (player == "T" && TCOUNT >= 5)
+		{
 			alert("Too many Ts!");
 		} else if (player == "CT" && CTCOUNT >= 5) {
 			alert("Too many CTs!");
@@ -178,7 +184,8 @@
 			gameobjectsbox.value=GAMEOBJECTS.join("\n");
 		}
 	}
-	
+
+
 	function setObjectPosition(x, y, selectedObject)
 	{
 		if (selectedObject != null)
@@ -196,48 +203,58 @@
 				case "Smoke" :
 					SMOKECOUNT = SMOKECOUNT + 1;
 					if (SMOKECOUNT > 10){alert("More than 10 Smokes?");}
-					cursorX = cursorX - 7
-					cursorY = cursorY - 7
+					cursorX = cursorX - 15
+					cursorY = cursorY - 15
 					insertIcon(selectedObject);
 					break;
 				
 				case "Flash" : 
 					FLASHCOUNT = FLASHCOUNT + 1;
 					if (FLASHCOUNT > 20){alert("More than 20 Flashes?");}
-					cursorX = cursorX - 7
-					cursorY = cursorY - 7
+					cursorX = cursorX - 15
+					cursorY = cursorY - 15
 					insertIcon(selectedObject);
 					break;
 				
 				case "HE" : 
 					HECOUNT = HECOUNT + 1;
 					if (HECOUNT > 10){alert("More than 10 HEs?");}
-					cursorX = cursorX - 3
-					cursorY = cursorY - 3
+					cursorX = cursorX - 13
+					cursorY = cursorY - 13
 					insertIcon(selectedObject);
 					break;
 				
 				case "Molly" : 
 					MOLLYCOUNT = MOLLYCOUNT + 1;
 					if (MOLLYCOUNT > 10){alert("More than 10 mollies?");}
-					cursorX = cursorX - 5
-					cursorY = cursorY - 10
+					cursorX = cursorX - 15
+					cursorY = cursorY - 20
 					insertIcon(selectedObject);
 					break;
 				
 				case "Decoy" : 
 					DECOYCOUNT = DECOYCOUNT + 1;
 					if (DECOYCOUNT > 10){alert("More than 10 Decoys? Bold strategy.");}
+                    cursorX = cursorX - 15
+					cursorY = cursorY - 20
 					insertIcon(selectedObject);
 					break;
 				
 				case "T" :
-					selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
+				    if (TCOUNT > 10){alert("More than 5 Terrorists?");}
+					//selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
+                    selectedObject = selectedObject + ' - Any'
+                    cursorX = cursorX - 8
+					cursorY = cursorY - 8
 					insertIcon(selectedObject);
 					break;
 					
-				case "CT" : 
-					selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
+				case "CT" :
+				    if (CTCOUNT > 10){alert("More than 5 CounterTerrorists?");}
+					//selectedObject = selectedObject + ' - ' + document.getElementById('weapon').value;
+					selectedObject = selectedObject + ' - Any'
+					cursorX = cursorX - 8
+					cursorY = cursorY - 8
 					insertIcon(selectedObject);
 					break;
 					
@@ -252,6 +269,7 @@
 		}
 	}
 
+
 	function insertIcon(selectedIcon) 
 	{
 		// The django server replaces all of the templating so we need to hard code the switch in JavaScript
@@ -262,7 +280,6 @@
 		newImage.setAttribute('height', '15px');
 		newImage.setAttribute('width', '15px');
 		newImage.setAttribute('class', 'icon');
-
 		switch (selectedIcon)
 		{
 			case "Smoke" :
@@ -306,7 +323,6 @@
 			default :
 				newImage.setAttribute('src', "{% static 'img/Decoy.png' %}");
 		}
-
 		newImage.style.left = cursorX + "px";
 		newImage.style.top = cursorY + "px";
 		document.body.appendChild(newImage);
@@ -332,13 +348,15 @@
 			removeIcon("icon");
 		}
 	}
-	
+
+
 	function removeIcon(selectedIcon)
 	{
 		var icon = document.getElementById(selectedIcon);
 		icon.parentNode.removeChild(icon);
 	}
-	
+
+
 	function resetAll()
 	{
 		clearGameObjects();
@@ -346,17 +364,19 @@
 		drawChart();
 	}
 
+
     var cursorX;
 	var cursorY;
 	function checkCursor()
 	{
-		document.onmousemove = function(e){
+		document.onmousemove = function(e)
+		{
 			cursorX = e.pageX;
 			cursorY = e.pageY;
 		}
 	}
-
 	setInterval("checkCursor()", 100);
+
 
 	function get_position()
 	{
