@@ -5,16 +5,13 @@ __pycache__/
 *.dll
 
 # Settings file (contains sensitive information
-/mysite/mysite/settings.py
-# I don't know if the key can be obtained from this file but just in case (should be excluded anyway)
-/mysite/mysite/settings.pyc
+settings.py
 
 # C extensions
 *.so
 
 # Static Files
-mysite/analyzer/static/
-mysite/blog/static/
+**/static/
 
 # Pycharm
 .idea/
@@ -23,6 +20,8 @@ mysite/blog/static/
 *.rar
 *.dem
 *.exe
+*.sqlite3
+*.db
 
 # Distribution / packaging
 .Python
