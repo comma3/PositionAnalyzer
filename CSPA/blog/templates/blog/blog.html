@@ -2,10 +2,11 @@
 
 {% block content %}
 	<div class="col-md-6">
-	{% for post in object_list %}
-		<h3>{{post.title}}</h3>
-		<h6>on {{post.date}}</h6>
-		{{post.body|safe|linebreaks}}
-	{% endfor %}
+		<h3>News:</h3>
+		{% for post in object_list %}
+			<h3>{{post.title}}</h3>
+			<h6>on {{post.date}}</h6>
+			{{post.body|safe|linebreaks}}
+		{% endfor %}
 	</div>
 {% endblock %}	
