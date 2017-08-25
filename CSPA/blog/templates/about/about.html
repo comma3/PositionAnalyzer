@@ -9,54 +9,65 @@ p {
 
 <div class="col-md-7">
     <h2>Counter-Strike: Global Offensive Position Analyzer</h2>
-    <p>This application provides a data-driven, strategic view of player and grenade positions in Counter-Strike: Global Offensive.
-        The inspiration for development comes from chess book openings and position analyzers. In its infancy, the tool finds CS rounds
-        that have game object setups similar to the proposed position and returns win percentages and links to HLTV recordings of these matches.
+    <p>This application is a tool for the data-driven, strategic analysis of player and grenade positions in the video game Counter-Strike: Global Offensive.
+        The site is inspired by chess book openings and position analyzers. In its infancy, the Position Analyzer finds CS rounds
+        that have game object positions similar to a proposed position and returns win percentages and links to HLTV recordings of these matches.
         Eventually, I would like to use these data to create an algorithm that ranks player and grenade setups and to have the tool
-        automatically identify the best attacks for certain defenses and the best defenses for certain offenses. Currently,
+        identify the best attacks for certain defenses and the best defenses for certain offenses. Currently,
         CSGO strategies are built on intuition - I hope this tool can help bring data-driven analysis into the game!</p>
 
-    <p>The basic idea is to place players and grenades on the map to simulate an instant in a game. Games that had that position
-        will be returned and a win percentage will be calculated. A link to the hltv.org recording of the match will be provided so
-        that you can view the game it's entirety and learn more about the context of the situation.</p>
+    <p>The basic idea is to place players and grenades on the map to represent an instant in a game. Games that had that position
+        will be returned and a win percentage will be calculated. A link to the <a href="https://www.hltv.org/" target="_blank">hltv.org</a>
+        recording of the match will be provided so that you can view the game its entirety and learn more about the context of the situation.
+        <a href="https://csgo-demos-manager.com/" target="_blank">CSGO Demo Manager</a> is an excellent tool to view demos
+        and further aid in your analysis.</p>
 
     <h3>Detailed Instructions:</h3>
     <p>Please note that several features are not implemented. In addition, there are more planned features that are not discussed here.
-        <b>I am currently unemployed so I don't have the money for computing resources. Your search may take several
-        minutes. As an aside, the database is smaller than it could be due to these financial constraints.</b></p>
+        <b>I am currently unemployed so I don't have much money for computing resources. As a result, your search may take several
+        minutes, and the search depth of the database is smaller than it could be due to these financial constraints.</b></p>
 
+    <p>The Analyzer page shows a map (<i>currently, only inferno, but I will change that soon</i>), several buttons, and several input fields.
+        To use the analyzer, first click on the button indicating the game object (player or grenade) that you wish to add to the map
+        (dead players may also be added). Then, click on the location on the map where you would like the piece to be placed.
+        The "Game Objects" box will be populated with the player/nade and its location. After selecting the desired postion,
+        press the green "GO!" button. </p>
 
-    <p>The Analyzer page shows a map (<i>currently, only inferno, but I hope to change that soon</i>), several buttons, and several input fields.
-        To use the analyzer, first click on a button indicating the game object (player or grenade) that you wish to add to the map. Then, click
-        on the location on the map where you would like the piece to be placed. The "Game Objects" box will be populated with the player/nade and
-        its location. The map coordinates have pixel-scale precision. The values are converted to game coordinates on the server. Dead players may
-        also be added.</p>
+    <p>Be precise with your clicking! The map has pixel-scale precision (each pixel is roughly 10 in-game units).</p>
 
-    <p>Players objects (CTs and Ts) will take the weapon that is indicated in the selection box labeled "weapon". <b>Due to the limited computation
-        resources mentioned above, I strongly suggest using "Any" at all times.</b> Other weapons may be used. However, the icon will be replaced with
-        the decoy symbol (I am currently creating images for each team/weapon combination).</p>
+    <p>Players will take the weapon that is indicated in the selection box labeled "weapon" when you click on the map. <b>Due
+        to the limited computing resources mentioned above, for the time being, I strongly suggest using "Any" at all times
+        to increase the likelihood of finding results.</b> Other weapons may be used. However, the icon will be replaced
+        with the decoy symbol (I am currently creating images for each team/weapon combination, but they are not finished).</p>
 
-    <p>Grenades have a considerably larger search space than players, so when a search has only grenades, the results may take a long time. Using a
-        combination of grenades and players reduces. </p>
+    <p><b>N.B.: Grenades have a considerably larger search space than players, so when a search has only grenades, the results may take a very long time
+        or even time out (you will get a server error). Using a combination of grenades and players reduces the grenade search space.</b></p>
 
     <p>On the right, there are several input boxes for options. These boxes are populated with default values that I think are good for searching.
         The map list is currently limited to inferno, and the rank feature is not implemented due to limited data. <b>If you work for Valve or know someone
-        who does, please don't hesitate to contact! I am interested in collecting data from games across mm ranks, but I am currently limited to data from
-        hltv.org.</b></p>
+        who does, please don't hesitate to contact me! I am interested in collecting data from games across match making ranks, but I am currently limited
+        to data from hltv because I don't have a good method for collecting Match Making data.</b></p>
 
-    <p>Below the map and rank selection, you will find a "Similarity threshold" and a "Distance tolerance". The similarity threshold determines the similarity
-        at which a game is considered a match. It takes decimal values from 0-1 with higher values requiring more similar positions to return a match. The distance tolerance determines
-        how quickly the similarity score decreases as the player or nade moves farther from the indicated position. This value is given in CS:GO map coordinates: One pixel
-        on the analyzer map roughly corresponds to 10 in-game units and a smoke grenade has a diameter of 288 units. When the distance between the in-game
+    <p>Below the map and rank selection, you will find a "Similarity threshold" and a "Distance tolerance". The similarity threshold determines
+        the similarity at which a game is considered a match. It takes decimal values from 0-1 with higher values requiring more similar
+        positions to return a match. The distance tolerance determines how quickly the similarity score decreases as the player or nade moves
+        farther from the indicated position. This value is given in CS:GO map coordinates: One pixel on the analyzer map roughly corresponds
+        to 10 in-game units (a smoke grenade has a diameter of 288 units). When the distance between the in-game
         object and the requested object is equal to the distance threshold, the similarity score will be 0.5. Using the given value of 400,
-        the radius of the player icon indicates a similarity of ~0.85. </p>
+        the radius of the player icon indicates a similarity of ~0.85 (which increases the closer the player is to the center.
+        I plan on implementing different distance tolerances for nades in the future.</p>
 
     <p>Finally, the various grenade types have different time thresholds. Counter-strike does not record when grenades are active, only when
         they are activated. Considering that smoke grenades last for 18 seconds, we need to search some time into the past when we are comparing a grenade
-        position to player positions. The minimum time represents how long into the past you would like to search, while the maximum time indicates
-        when the search should stop. Both values may be positive or negative.
-    </p>
+        position to player positions or other grenades. The minimum time represents how long into the past you would like to search, while the maximum time indicates
+        when the search should stop. Both values may be positive or negative. </p>
 
+
+    <h3>Useful links:</h3>
+    <ul>
+    <li><a href="https://csgo-demos-manager.com/" target="_blank">CSGO Demo Manager</a></li>
+    <li><a href="https://www.hltv.org/" target="_blank">HLTV.org</a></li>
+    </ul>
 
 </div>
 {% endblock %}
