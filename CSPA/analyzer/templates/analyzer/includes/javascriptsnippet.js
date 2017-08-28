@@ -44,18 +44,24 @@
             goodInput = false;
         }
 
-        distance = "&distance=" + document.getElementById("distance").value;
-		
-		smokemin = "&smokemin=" + document.getElementById("smokemin").value;
-		smokemax = "&smokemax=" + document.getElementById("smokemax").value;
-		mollymin = "&mollymin=" + document.getElementById("mollymin").value;
-		mollymax = "&mollymax=" + document.getElementById("mollymax").value;
-		flashmin = "&flashmin=" + document.getElementById("flashmin").value;
-		flashmax = "&flashmax=" + document.getElementById("flashmax").value;
-		hemin = "&hemin=" + document.getElementById("hemin").value;
-		hemax = "&hemax=" + document.getElementById("hemax").value;
-		
-	    params = objects + map + threshold + distance + smokemin + smokemax + mollymin + mollymax + flashmin + flashmax + hemin + hemax;
+        if (isAdvanced)
+        {
+            distance = "&distance=" + document.getElementById("distance").value;
+
+            smokemin = "&smokemin=" + document.getElementById("smokemin").value;
+            smokemax = "&smokemax=" + document.getElementById("smokemax").value;
+            mollymin = "&mollymin=" + document.getElementById("mollymin").value;
+            mollymax = "&mollymax=" + document.getElementById("mollymax").value;
+            flashmin = "&flashmin=" + document.getElementById("flashmin").value;
+            flashmax = "&flashmax=" + document.getElementById("flashmax").value;
+            hemin = "&hemin=" + document.getElementById("hemin").value;
+            hemax = "&hemax=" + document.getElementById("hemax").value;
+
+            params = objects + map + threshold + distance + smokemin + smokemax + mollymin + mollymax + flashmin + flashmax + hemin + hemax;
+	    } else {
+	        params = objects + map
+	    }
+	    
         xhr.open("POST", url, true);
 	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
