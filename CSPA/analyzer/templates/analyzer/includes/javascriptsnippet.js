@@ -294,18 +294,18 @@
 			case "Smoke" :
 				newImage.setAttribute('height', '30px');
 				newImage.setAttribute('width', '30px');
-				newImage.setAttribute('src', "{% static 'img/Smoke.png' %}");
+				newImage.setAttribute('src', "{% static 'img/smoke.png' %}");
 				break;
 			case "Flash" :
 				newImage.setAttribute('height', '30px');
 				newImage.setAttribute('width', '30px');
-				newImage.setAttribute('src', "{% static 'img/Flash.png' %}")
+				newImage.setAttribute('src', "{% static 'img/flash.png' %}")
 				newImage.setAttribute('style', "opacity:0.6");
 				break;
 			case "Molly" :
 				newImage.setAttribute('height', '30px');
 				newImage.setAttribute('width', '30px');
-				newImage.setAttribute('src', "{% static 'img/Molly.png' %}");
+				newImage.setAttribute('src', "{% static 'img/molly.png' %}");
 				break;
 			case "HE" :
 				newImage.setAttribute('height', '30px');
@@ -315,7 +315,7 @@
 			case "Decoy" :
 				newImage.setAttribute('height', '30px');
 				newImage.setAttribute('width', '30px');
-				newImage.setAttribute('src', "{% static 'img/Decoy.png' %}");
+				newImage.setAttribute('src', "{% static 'img/decoy.png' %}");
 				break;		
 			case "BombDown" :
 				newImage.setAttribute('src', "{% static 'img/bombdown.png' %}");
@@ -330,7 +330,7 @@
 				newImage.setAttribute('src', "{% static 'img/CT - Any.png' %}");
 				break;
 			default :
-				newImage.setAttribute('src', "{% static 'img/Decoy.png' %}");
+				newImage.setAttribute('src', "{% static 'img/decoy.png' %}");
 		}
 		newImage.style.left = cursorX + "px";
 		newImage.style.top = cursorY + "px";
@@ -400,6 +400,13 @@
             setObjectPosition(pos_x, pos_y, OBJECT);
         }
 	}
+
+	function showAdvanced()
+	{
+	    document.getElementById("Advanced1").innerHTML = "<b>Similarity threshold:</b><input id='threshold' type='text' value='0.81' class='form-control input-sm'><b>Smoke minimum:</b><input id='smokemin' type='text' value='-8' class='form-control input-sm'><b>Molly minimum:</b><input id='mollymin' type='text' value='-4' class='form-control input-sm'><b>Flash minimum:</b><input id='flashmin' type='text' value='-2' class='form-control input-sm'><b>HE minimum:</b><input id='hemin' type='text' value='-2' class='form-control input-sm'>";
+	    document.getElementById("Advanced2").innerHTML = "<b>Rank:</b><select id='rank' class='form-control input-sm'><option value='pro'>Pro</option><option value='all'>All</option><option value='allmm'>All MM</option><option value='global'>Global</option><option value='smfc'>SMFC</option><option value='eagle'>Eagle</option><option value='mgedmg'>MGE/DMG</option><option value='mg'>MG1/2</option><option value='gn34'>GN3/4</option><option value='gn12'>GN1/2</option><option value='s45'>Silver4/5</option><option value='s123'>ChuBot's Level</option></select><b>Distance tolerance:</b><input id='distance' type='text' value='400' class='form-control input-sm'><b>Smoke maximum:</b><b>Molly maximum:</b><input id='mollymax' type='text' value='0' class='form-control input-sm'><b>Flash maximum:</b><input id='flashmax' type='text' value='1' class='form-control input-sm'><b>HE maximum:</b><input id='hemax' type='text' value='1' class='form-control input-sm'>";
+	}
+
 
 	var OBJECT = null;
 	var GAMEOBJECTS = [];
