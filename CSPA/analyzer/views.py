@@ -18,17 +18,17 @@ def find_games(request):
     # Get data from the request
     game_objects = request.POST.get('gameobjects', None).split('_')
     request_map = request.POST.get('map', None)
-    threshold = float(request.POST.get('threshold', None))
-    distance_scale = float(request.POST.get('distance', None))
+    threshold = float(request.POST.get('threshold', 0.81))
+    distance_scale = float(request.POST.get('distance', 400))
     # We want to ability to project nades for different periods of time
-    smoke_min = float(request.POST.get('smokemin', None))
-    smoke_max = float(request.POST.get('smokemax', None))
-    molly_min = float(request.POST.get('mollymin', None))
-    molly_max = float(request.POST.get('mollymax', None))
-    flash_min = float(request.POST.get('flashmin', None))
-    flash_max = float(request.POST.get('flashmax', None))
-    he_min = float(request.POST.get('hemin', None))
-    he_max = float(request.POST.get('hemax', None))
+    smoke_min = float(request.POST.get('smokemin', -5))
+    smoke_max = float(request.POST.get('smokemax', -1))
+    molly_min = float(request.POST.get('mollymin', -2))
+    molly_max = float(request.POST.get('mollymax', -0.5))
+    flash_min = float(request.POST.get('flashmin', -1.5))
+    flash_max = float(request.POST.get('flashmax', -0.5))
+    he_min = float(request.POST.get('hemin', -2))
+    he_max = float(request.POST.get('hemax', 1))
 
 
     report = []
