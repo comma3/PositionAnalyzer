@@ -35,17 +35,18 @@
 	        document.getElementById("query").disabled = false;
 	        return
 	    }
+
         objects = "gameobjects=" + document.getElementById("gameobjectsbox").value.replace(/\n/g,'_')
         map = "&map=" + document.getElementById("map").value;
-        threshold = "&threshold=" + document.getElementById("threshold").value;
-        if (threshold > 1)
-        {
-            alert("Threshold must be between 0 and 1. That is, it should be a decimal like 0.81");
-            goodInput = false;
-        }
-
         if (isAdvanced)
         {
+            threshold = "&threshold=" + document.getElementById("threshold").value;
+            if (threshold > 1)
+            {
+                alert("Threshold must be between 0 and 1. That is, it should be a decimal like 0.81");
+                goodInput = false;
+            }
+
             distance = "&distance=" + document.getElementById("distance").value;
 
             smokemin = "&smokemin=" + document.getElementById("smokemin").value;
@@ -59,9 +60,10 @@
 
             params = objects + map + threshold + distance + smokemin + smokemax + mollymin + mollymax + flashmin + flashmax + hemin + hemax;
 	    } else {
+	        // Default parameters are provided by the backend
 	        params = objects + map
 	    }
-	    
+
         xhr.open("POST", url, true);
 	    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
