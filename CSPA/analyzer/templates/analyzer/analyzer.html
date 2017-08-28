@@ -13,7 +13,7 @@
 		<b>Select a game object including the player weapon (or add a dead player to the further restrict your search):</b>
 		<div class="btn-group">
 		<span class="form-inline">
-			<label for="weapon"><b>Weapon:&emsp;&nbsp;</b></label>
+			<label for="weapon"><b>&emsp;&nbsp;Weapon:&emsp;&nbsp;</b></label>
 			<select class="form-control input-sm" id="weapon" name="weapon">
 				{% include "analyzer/includes/weaponsnippet.html" %}
 			</select>
@@ -31,6 +31,7 @@
 			<button type="button" onclick="setActive('BombDown')" class="btn btn-primary btn-sm">Bomb Down</button>
 			<button type="button" onclick="setActive('BombPlanted')" class="btn btn-primary btn-sm">Bomb Planted</button>
 		</div>
+		<br>
 		<b>Place it on the map:</b>
 		<img src="{% static 'img/inferno_newcrop.png' %}" id="minimap" width="456" height="451" onclick="get_position()">
 	</div>
@@ -44,6 +45,7 @@
 		<br>
 		<div>
 			<b>When you've placed all the game objects, run the search:</b>
+			<br>
 			<button return="false" id="query" class="btn btn-success btn-md" onclick="runQuery()">GO!</button>
 			<button type="button" onclick="clearGameObjects()" class="btn btn-danger btn-md">Clear Board</button>
 		</div>

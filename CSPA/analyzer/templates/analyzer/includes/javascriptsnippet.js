@@ -403,7 +403,7 @@
 
 	function showAdvanced()
 	{
-	    if {isAdvanced}{
+	    if (isAdvanced){
 	        document.getElementById("Advanced1").innerHTML = ''
 	        document.getElementById("Advanced2").innerHTML = ''
 	        isAdvanced = false;
