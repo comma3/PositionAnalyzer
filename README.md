@@ -1,37 +1,4 @@
-## Welcome to GitHub Pages
+## Counter-Strike Global Offensive Position Analyzer
 
-You can use the [editor on GitHub](https://github.com/comma3/PositionAnalyzer/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This application provides a data-driven, strategic view of player and grenade positions in Counter-Strike: Global Offensive. The inspiration for development comes from chess book openings and position analyzers. In its infancy, the tool finds rounds that have setups similar to the proposed position and returns win percentages with links to HLTV recordings of rounds that showed those positions. Eventually, I would like to use these data to use a nueral network to rank player and grenade setups and to have the tool automatically identify the best attacks for certain defenses and the best defenses for certain offenses. Currently, CSGO strategies are built on intuition - I hope this tool can help bring data-driven analysis into the game!
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/comma3/PositionAnalyzer/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.

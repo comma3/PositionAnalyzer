@@ -19,11 +19,11 @@ def find_games(request):
     game_objects = request.POST.get('gameobjects', None).split('_')
     request_map = request.POST.get('map', None)
     threshold = float(request.POST.get('threshold', 0.81))
-    distance_scale = float(request.POST.get('distance', 400))
+    distance_scale = float(request.POST.get('distance', 600))
     # We want to ability to project nades for different periods of time
-    smoke_min = float(request.POST.get('smokemin', -5))
+    smoke_min = float(request.POST.get('smokemin', -10))
     smoke_max = float(request.POST.get('smokemax', -1))
-    molly_min = float(request.POST.get('mollymin', -2))
+    molly_min = float(request.POST.get('mollymin', -3))
     molly_max = float(request.POST.get('mollymax', -0.5))
     flash_min = float(request.POST.get('flashmin', -1.5))
     flash_max = float(request.POST.get('flashmax', -0.5))
@@ -293,8 +293,6 @@ def find_games(request):
                     similarities.append(tempscore)
             else:
                 continue
-
-
 
             # Convert profit function into cost function
             for i, row in enumerate(similarities):
